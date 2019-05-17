@@ -1,2 +1,3 @@
-# ProfessionalSelenium
-Supporting utilities to develop web application automation with Selenium.
+# Selenium utilities
+Supporting utilities to develop automation suite with Java/Selenium.
+Web Automation and File Automation related basic reusable building blocks are put together for faster protoyping.
