@@ -15,8 +15,11 @@ public class Ascii {
 	public static final int ART_SIZE_HUGE = 32;
 
 	public enum ASCIIArtFont {
-		ART_FONT_DIALOG("Dialog"), ART_FONT_DIALOG_INPUT("DialogInput"), ART_FONT_MONO("Monospaced"),
-		ART_FONT_SERIF("Serif"), ART_FONT_SANS_SERIF("SansSerif");
+		ART_FONT_DIALOG("Dialog"),
+		ART_FONT_DIALOG_INPUT("DialogInput"), 
+		ART_FONT_MONO("Monospaced"),
+		ART_FONT_SERIF("Serif"), 
+		ART_FONT_SANS_SERIF("SansSerif");
 
 		private String value;
 
@@ -29,6 +32,13 @@ public class Ascii {
 		}
 	}
 
+	/**
+	 * Print text in big size letter in console 
+	 * @param artText
+	 * @param textHeight
+	 * @param fontType
+	 * @param artSymbol
+	 */
 	public void printTextArt(String artText, int textHeight, ASCIIArtFont fontType, String artSymbol) {
 		String fontName = fontType.getValue();
 		int imageWidth = findImageWidth(textHeight, artText, fontName);

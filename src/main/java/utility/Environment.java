@@ -1,36 +1,40 @@
 package utility;
 
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import pojo.ThreadData;
 
+/**
+ * Environment Class will keep track of all variable required through the execution.
+ * This variables are not Thread depended variables.
+ * @author SouravS
+ *
+ */
 public class Environment {
+	
+	public static boolean ScreenshotFlag = false, DebugFlag = false;
+	public static String MachineIP = new SupportUtil().machineIP();
+	public static Map<String, ThreadData> ThreadPool = new HashMap<String, ThreadData>();;
 
-	public static String LogPath;
-	public static boolean ScreenshotFlag, Debug_Flag;
-	public static String MachineIP;
-	public static String Version;
-	public static Properties Properties;
-	public static Map<String, ThreadData> ThreadPool;
+	public static boolean isScreenshotFlag() {
+		return ScreenshotFlag;
+	}
 
-	public void init() throws Exception {
-		Debug_Flag = false;
-		MachineIP = new SupportUtil().machineIP();
+	public static void setScreenshotFlag(boolean screenshotFlag) {
+		ScreenshotFlag = screenshotFlag;
+	}
 
-		// Load Properties File
-		Properties = new Properties();
-		FileInputStream configFile = new FileInputStream("Dependency\\config.properties");
-		Properties.load(configFile);
+	public static boolean isDebugFlag() {
+		return DebugFlag;
+	}
 
-		// Initialize Global Variables
-		ThreadPool = new HashMap<String, ThreadData>();
+	public static void setDebugFlag(boolean debugFlag) {
+		DebugFlag = debugFlag;
+	}
 
-		// Set Variables
-		Version = "1.0.20190403.a";
-		ScreenshotFlag = false;
+	public static String getMachineIP() {
+		return MachineIP;
 	}
 
 }

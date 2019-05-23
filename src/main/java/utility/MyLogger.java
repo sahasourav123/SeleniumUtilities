@@ -76,7 +76,7 @@ public class MyLogger {
 			break;
 
 		case "Debug":
-			if (!Environment.Debug_Flag)
+			if (!Environment.DebugFlag)
 				break;
 			text = Thread.currentThread().getName() + " >> " + logType + " >> [" + className + "] :\t" + message;
 			System.out.println(text);

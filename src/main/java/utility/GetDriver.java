@@ -10,12 +10,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 
 public class GetDriver {
 	WebDriver driver;
+	int implicit_wait = 10;
 
+	/**
+	 * Create an IE Driver Instance
+	 * @param initialURL
+	 * @return
+	 */
 	public WebDriver ieDriver(String initialURL) {
 
 		System.setProperty("webdriver.ie.driver", "Dependency\\IEDriverServer.exe");
@@ -31,17 +38,45 @@ public class GetDriver {
 		// options.setCapability(InternetExplorerDriver.FORCE_CREATE_PROCESS, true);
 		this.driver = new InternetExplorerDriver(options);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);
 
 		// Set browser zoom level 100%
 		driver.findElement(By.tagName("body")).sendKeys(Keys.chord(Keys.CONTROL, "0"));
-		// test();
 
 		return driver;
 	}
 
+	/**
+	 * Create a Chrome Driver Instance
+	 * @return
+	 */
+	public WebDriver chromeDriver() {
+
+		System.setProperty("webdriver.chrome.driver", "Dependency\\chromedriver.exe");
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);
+		return driver;
+	}
+
+	/**
+	 * Create a Firefox Driver Instance
+	 * @return
+	 */
+	public WebDriver firefoxDriver() {
+
+		System.setProperty("webdriver.gecko.driver", "Dependency\\geckodriver.exe");
+		driver = new FirefoxDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);
+		return driver;
+	}
+
 	@SuppressWarnings("unused")
-	private void killAttchedBrowser() {
+	/*
+	 * IMPORTANT: Method is not yet developed
+	 */
+	private void killAttchedBrowserProcess() {
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
 		final int index = jvmName.indexOf('@');
 		if (index > 1) {
@@ -52,11 +87,11 @@ public class GetDriver {
 						.getInputStream());
 				scan.useDelimiter("\\A");
 				String childProcessIds = scan.hasNext() ? scan.next() : "";
-				List<String> chromeDrivers = new ArrayList<String>();
+				List<String> drivers = new ArrayList<String>();
 				String[] splited = childProcessIds.split("\\s+");
 				for (int i = 0; i < splited.length; i = i + 2) {
 					if ("IEDriverServer.exe".equalsIgnoreCase(splited[i])) {
-						chromeDrivers.add(splited[i + 1]);
+						drivers.add(splited[i + 1]);
 					}
 				}
 				scan.close();
@@ -66,23 +101,4 @@ public class GetDriver {
 		}
 		System.out.println("");
 	}
-
-	public WebDriver chromeDriver() {
-
-		System.setProperty("webdriver.chrome.driver", "Dependency\\chromedriver.exe");
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		return driver;
-	}
-
-	public WebDriver firefoxDriver() {
-
-		System.setProperty("webdriver.gecko.driverr", "Dependency\\geckodriver.exe");
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		return driver;
-	}
-
 }

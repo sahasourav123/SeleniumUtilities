@@ -17,6 +17,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelData {
 
+	/**
+	 * Read data from excel worksheet and return data as 2D array
+	 * Fill No_Data if any cell is [Blank] 
+	 * @param srcFile
+	 * @param sheetName
+	 * @return
+	 */
 	public String[][] readData(String srcFile, String sheetName) {
 
 		try {
@@ -71,6 +78,11 @@ public class ExcelData {
 		}
 	}
 
+	/**
+	 * Create a work-sheet named 'export' and Write data
+	 * @param destFile - file name to SaveAs
+	 * @param dataSet - ArrayList of 1D Array 
+	 */
 	public void writeData(String destFile, ArrayList<String[]> dataSet) {
 		Workbook workbook = new XSSFWorkbook();
 		Sheet opSheet = workbook.createSheet("export");

@@ -3,6 +3,7 @@ package utility;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -20,6 +21,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import pojo.ThreadData;
 import utility.CustomWait;
 
 public class DriverSupport {
@@ -27,10 +29,12 @@ public class DriverSupport {
 	WebDriver driver;
 	MyLogger logger;
 	String threadName;
+	ThreadData threadData;
 
 	public DriverSupport(WebDriver driver) {
 		this.driver = driver;
 		threadName = Thread.currentThread().getName();
+		threadData = Environment.ThreadPool.get(threadName);
 		this.logger = new MyLogger(
 				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
@@ -41,45 +45,76 @@ public class DriverSupport {
 				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
 
+	/**
+	 * Click on a WebElement identified by 'id'
+	 * @param id[as String]
+	 */
 	public void jsId(String id) {
 		WebElement element = driver.findElement(By.id(id));
 		jsElement(element);
 	}
 
+	/**
+	 * Click on a WebElement identified by 'xpath'
+	 * @param xapth[as String]
+	 */
 	public void jsXpath(String xpath) {
 		WebElement element = driver.findElement(By.xpath(xpath));
 		jsElement(element);
 	}
 
+	/**
+	 * Click on a WebElement identified by 'By' object
+	 * @param by[as By Object]
+	 */
 	public void jsElement(By byElement) {
 		WebElement element = driver.findElement(byElement);
 		jsElement(element);
 	}
 
+	/**
+	 * Click on a WebElement
+	 * @param element[as WebElement]
+	 */
 	public void jsElement(WebElement element) {
 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 	}
 
+	/**
+	 * Click on WebElement identified by locator name and value
+	 * @param locatorType[as String]
+	 * @param locatorValue[as String]
+	 */
 	public void jsClick(String locatorType, String locatorValue) {
 		WebElement element = driver.findElement(customLocator(locatorType, locatorValue));
 		jsElement(element);
 	}
 
-	// Switch to Frame without wait
-	public boolean switchToFrame(String frameNames) {
+	/**
+	 * Switch to Frame without wait 
+	 * @param frameNames
+	 * @param seperator
+	 * @return
+	 */
+	public boolean switchToFrame(String frameNames, String seperator) {
 		driver.switchTo().defaultContent();
-		String[] frames = frameNames.split("~");
+		String[] frames = frameNames.split(seperator);
+		return switchToFrame(Arrays.asList(frames));
+	}
+	
+	public boolean switchToFrame(List<String> frames) {
 
 		try {
 			for (String frame : frames) {
 				driver.switchTo().frame(frame);
 			}
-			logger.debug("Switched to Frame: " + frameNames);
+			logger.debug("Switched to Frame: " + frames);
 			return true;
 		} catch (NoSuchFrameException nfe) {
 			return false;
 		}
 	}
+	
 
 	// Switch to Frame with Wait for the frame to be available
 	public void switchToFrameWithWait(String frameNames) {
@@ -152,17 +187,17 @@ public class DriverSupport {
 	}
 
 	public boolean switchPreviousFrameSet() {
-		ArrayList<String> frameStack = Environment.ThreadPool.get(threadName).frameStack;
+		ArrayList<String> frameStack = threadData.frameStack;
 		int lastIndex = frameStack.size();
 		if (lastIndex == 0)
 			return false;
 		String frameSet = frameStack.get(lastIndex - 1);
 		frameStack.remove(lastIndex - 1);
-		return switchToFrame(frameSet);
+		return switchToFrame(frameSet, ",");
 	}
 
 	public boolean switchPreviousWindow() {
-		ArrayList<String> windowStack = Environment.ThreadPool.get(threadName).windowStack;
+		ArrayList<String> windowStack = threadData.windowStack;
 		int stackSize = windowStack.size();
 		if (stackSize < 2)
 			return false;
@@ -171,47 +206,66 @@ public class DriverSupport {
 		return switchToWindow(windowName);
 	}
 
+	/**
+	 * Create By Object from locator name and value
+	 * Supported locator: name, id, xpath, CSSSelector, class, ClassName, idContains, nameContains,
+	 * idStartWith, idEndWith, linkText, PartialLinkText, TagName 
+	 * @param locatorType
+	 * @param locatorValue
+	 * @return
+	 */
 	public By customLocator(String locatorType, String locatorValue) {
 		By byLocator = null;
 		switch (locatorType.toLowerCase()) {
 		case "name":
 			byLocator = By.name(locatorValue);
 			break;
+			
 		case "id":
 			byLocator = By.id(locatorValue);
 			break;
-		case "cssid":
-			if (driver.findElements(By.cssSelector("[id$=" + locatorValue + "]")).size() != 0) {
-				byLocator = By.cssSelector("[id$=" + locatorValue + "]");
-			} else if (driver.findElements(By.cssSelector("[id^=" + locatorValue + "]")).size() != 0) {
-				byLocator = By.cssSelector("[id^=" + locatorValue + "]");
-			}
+			
+		case "idstartwith":
+			byLocator = By.cssSelector("[id^=" + locatorValue + "]");
 			break;
-		case "cssSelector":
+			
+		case "idendwith":
+			byLocator = By.cssSelector("[id$=" + locatorValue + "]");
+			break;
+			
+		case "cssselector":
 			byLocator = By.cssSelector(locatorValue);
 			break;
+			
 		case "xpath":
 			byLocator = By.xpath(locatorValue);
 			break;
+			
 		case "namecontains":
 			byLocator = By.xpath("//*[contains(@name,'" + locatorValue + "')]");
 			break;
+			
 		case "idcontains":
 			byLocator = By.xpath("//*[contains(@id,'" + locatorValue + "')]");
 			break;
+			
 		case "class":
 		case "classname":
 			byLocator = By.className(locatorValue);
 			break;
+			
 		case "linktext":
 			byLocator = By.linkText(locatorValue);
 			break;
+			
 		case "partialLinkText":
 			byLocator = By.partialLinkText(locatorValue);
 			break;
+			
 		case "tagname":
 			byLocator = By.tagName(locatorValue);
 			break;
+			
 		case "NA":
 			break;
 

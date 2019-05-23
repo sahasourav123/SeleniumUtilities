@@ -130,7 +130,7 @@ public class CustomWait {
 
 	public void waitForElementWithinFrame(int timeToWait, String frameNames, String howToIdentify, String elementId)
 			throws Exception {
-		support.switchToFrame(frameNames);
+		support.switchToFrame(frameNames, ",");
 		explicitWait(timeToWait, howToIdentify, elementId);
 	}
 
