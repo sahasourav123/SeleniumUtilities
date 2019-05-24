@@ -209,7 +209,7 @@ public class DriverSupport {
 	/**
 	 * Create By Object from locator name and value
 	 * Supported locator: name, id, xpath, CSSSelector, class, ClassName, idContains, nameContains,
-	 * idStartWith, idEndWith, linkText, PartialLinkText, TagName 
+	 * idStartWith, idEndWith, linkText, PartialLinkText, TagName, nameStartWith, nameEndWith
 	 * @param locatorType
 	 * @param locatorValue
 	 * @return
@@ -217,12 +217,12 @@ public class DriverSupport {
 	public By customLocator(String locatorType, String locatorValue) {
 		By byLocator = null;
 		switch (locatorType.toLowerCase()) {
-		case "name":
-			byLocator = By.name(locatorValue);
-			break;
-			
 		case "id":
 			byLocator = By.id(locatorValue);
+			break;
+			
+		case "idcontains":
+			byLocator = By.xpath("//*[contains(@id,'" + locatorValue + "')]");
 			break;
 			
 		case "idstartwith":
@@ -241,12 +241,20 @@ public class DriverSupport {
 			byLocator = By.xpath(locatorValue);
 			break;
 			
+		case "name":
+			byLocator = By.name(locatorValue);
+			break;
+			
 		case "namecontains":
 			byLocator = By.xpath("//*[contains(@name,'" + locatorValue + "')]");
 			break;
 			
-		case "idcontains":
-			byLocator = By.xpath("//*[contains(@id,'" + locatorValue + "')]");
+		case "namestartwith":
+			byLocator = By.cssSelector("[name^=" + locatorValue + "]");
+			break;
+			
+		case "nameendwith":
+			byLocator = By.cssSelector("[name$=" + locatorValue + "]");
 			break;
 			
 		case "class":

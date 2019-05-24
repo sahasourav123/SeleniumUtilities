@@ -55,7 +55,7 @@ public class ExcelData {
 
 					String value = "";
 
-					switch (cell.getCellTypeEnum()) {
+					switch (cell.getCellType()) {
 					case NUMERIC:
 						value = String.valueOf((int) cell.getNumericCellValue());
 						break;

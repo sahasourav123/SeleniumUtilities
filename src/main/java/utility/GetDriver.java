@@ -8,8 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
@@ -33,10 +35,9 @@ public class GetDriver {
 		options.setCapability(InternetExplorerDriver.UNEXPECTED_ALERT_BEHAVIOR, "accept");
 		options.setCapability(InternetExplorerDriver.BROWSER_ATTACH_TIMEOUT, 10000);
 		options.setCapability(InternetExplorerDriver.SILENT, true);
-		options.setCapability(InternetExplorerDriver.INITIAL_BROWSER_URL, initialURL);
 		options.setCapability(InternetExplorerDriver.ELEMENT_SCROLL_BEHAVIOR, true);
-		// options.setCapability(InternetExplorerDriver.FORCE_CREATE_PROCESS, true);
-		this.driver = new InternetExplorerDriver(options);
+		if(initialURL.length()>0)  options.setCapability(InternetExplorerDriver.INITIAL_BROWSER_URL, initialURL);
+		driver = new InternetExplorerDriver(options);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);
 
@@ -51,11 +52,18 @@ public class GetDriver {
 	 * @return
 	 */
 	public WebDriver chromeDriver() {
+		return chromeDriver("");
+	}
+	
+	public WebDriver chromeDriver(String initialURL) {
 
 		System.setProperty("webdriver.chrome.driver", "Dependency\\chromedriver.exe");
-		driver = new ChromeDriver();
+		ChromeOptions options = new ChromeOptions();
+		options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
+		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);
+		if(initialURL.length()>0) driver.get(initialURL);
 		return driver;
 	}
 
@@ -64,11 +72,17 @@ public class GetDriver {
 	 * @return
 	 */
 	public WebDriver firefoxDriver() {
+		return firefoxDriver("");
+	}
+	
+	
+	public WebDriver firefoxDriver(String initialURL) {
 
 		System.setProperty("webdriver.gecko.driver", "Dependency\\geckodriver.exe");
 		driver = new FirefoxDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);
+		if(initialURL.length()>0) driver.get(initialURL);
 		return driver;
 	}
 

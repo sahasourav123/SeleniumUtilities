@@ -107,24 +107,28 @@ public class CustomWait {
 
 	}
 
-	public void waitForStalenessOfElement(int timeToWait, String howToIdentify, String elementId) {
+	public boolean waitForStalenessOfElement(int timeToWait, String howToIdentify, String elementId) {
 		WebDriverWait wait = new WebDriverWait(driver, timeToWait);
 		By locator = support.customLocator(howToIdentify, elementId);
 		WebElement element = driver.findElement(locator);
 
 		try {
 			wait.until(ExpectedConditions.stalenessOf(element));
+			return true;
 		} catch (Exception e) {
+			return false;
 		}
 	}
 
-	public void waitForInvisibilityOfElement(int timeToWait, String howToIdentify, String elementId) {
+	public boolean waitForInvisibilityOfElement(int timeToWait, String howToIdentify, String elementId) {
 		WebDriverWait wait = new WebDriverWait(driver, timeToWait);
 		By locator = support.customLocator(howToIdentify, elementId);
 
 		try {
 			wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+			return true;
 		} catch (Exception e) {
+			return false;
 		}
 	}
 
