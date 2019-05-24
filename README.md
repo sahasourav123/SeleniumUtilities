@@ -28,7 +28,46 @@ Web Automation and File Automation related basic reusable building blocks are pu
 ### Create Broswser Instance
 ```
 WebDriver driver;
-driver = new GetDriver().chromeDriver();
-driver = new GetDriver().ieDriver("https://github.com/sahasourav123/SeleniumUtilities");
+String url = "https://github.com/sahasourav123/SeleniumUtilities";
+```
+Create Chrome Driver Instance with initial URL
+```
+driver = new GetDriver().chromeDriver(url);
+```
+Create IE Driver Instance with Initial URL
+```
+driver = new GetDriver().ieDriver(url);
+```
+Create Firefox Driver Instance without Initial URL
+```
 driver = new GetDriver().firefoxDriver();
+```
+DriverSupport Object handles interaction with WebElement 
+ ```
+DriverSupport support = new DriverSupport(driver);
+```
+ Find a WebElement quickly using Keywords(Case In-Sensitive):
+ *  name, nameContains,nameStartWith, nameEndWith, id, idContains,idStartWith, idEndWith, CSSSelector, class, ClassName, linkText, PartialLinkText, TagName
+ ```
+By byElement = support.customLocator("idStartWith", "Quote");
+```
+Check if Element present in dom
+```
+boolean isElement = support.isElement(byElement);
+```
+Click on the element if present
+```
+support.jsElement(byElement);
+```
+
+CustomWait object handle different types of wait on WebElement, iFrame and WindowsHandle
+```
+CustomWait wait = new CustomWait(driver);
+```
+Wait up-to specified seconds for a element and return boolean status
+```
+boolean status;
+status = wait.explicitWait(8, byElement);
+status = wait.waitForInvisibilityOfElement(5, "idContains", "Partial_name_of_element");
+status = wait.waitForStalenessOfElement(5, "xapth", "XPath_of_element");
 ```
