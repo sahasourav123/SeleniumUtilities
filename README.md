@@ -27,7 +27,7 @@ Web Automation and File Automation related basic reusable building blocks are pu
 ```
 
 ### Example
-[Look Here](https://github.com/sahasourav123/SeleniumUtilities/blob/master/src/test/java/example/Examples.java)
+Automation Script using this [Utility API](https://github.com/sahasourav123/SeleniumUtilities/blob/master/src/test/java/example/Examples.java)
 
 ### Get Compatible Driver
 Download compatible driver.exe.
