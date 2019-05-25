@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>automation</groupId>
 	<artifactId>SeleniumUtilities</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.4</version>
 	<name>Selenium Utilities</name>
 	<packaging>jar</packaging>
 	<description>Support Utility for Selenium for Rapid Prototyping</description>
@@ -13,10 +13,10 @@
 		<!-- github server corresponds to entry in ~/.m2/settings.xml -->
 		<github.global.server>github</github.global.server>
 		<project.java.version>1.8</project.java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
-	
+
 	<!-- Developer Description -->
 	<developers>
 		<developer>
@@ -132,6 +132,34 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			-->
 
 			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>

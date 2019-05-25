@@ -27,7 +27,7 @@ public class GetDriver {
 	 */
 	public WebDriver ieDriver(String initialURL) {
 
-		System.setProperty("webdriver.ie.driver", "Dependency\\IEDriverServer.exe");
+		System.setProperty("webdriver.ie.driver", "IEDriverServer.exe");
 		InternetExplorerOptions options = new InternetExplorerOptions();
 
 		options.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
@@ -57,7 +57,7 @@ public class GetDriver {
 	
 	public WebDriver chromeDriver(String initialURL) {
 
-		System.setProperty("webdriver.chrome.driver", "Dependency\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
 		driver = new ChromeDriver(options);
@@ -78,7 +78,7 @@ public class GetDriver {
 	
 	public WebDriver firefoxDriver(String initialURL) {
 
-		System.setProperty("webdriver.gecko.driver", "Dependency\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
 		driver = new FirefoxDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);

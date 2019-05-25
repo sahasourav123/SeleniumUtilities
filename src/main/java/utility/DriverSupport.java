@@ -210,8 +210,8 @@ public class DriverSupport {
 	 * Create By Object from locator name and value
 	 * Supported locator: name, id, xpath, CSSSelector, class, ClassName, idContains, nameContains,
 	 * idStartWith, idEndWith, linkText, PartialLinkText, TagName, nameStartWith, nameEndWith
-	 * @param locatorType
-	 * @param locatorValue
+	 * @param locatorType - keyword for locator 
+	 * @param locatorValue - locator value as per HTML
 	 * @return
 	 */
 	public By customLocator(String locatorType, String locatorValue) {
@@ -321,6 +321,15 @@ public class DriverSupport {
 		}
 	}
 
+	public boolean isChildElement(WebElement parentElement, By locator) {
+		try {
+			parentElement.findElement(locator);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	public boolean isChildElement(WebElement parentElement, String locatorType, String locatorValue) {
 		try {
 			parentElement.findElement(customLocator(locatorType, locatorValue));
@@ -406,10 +415,13 @@ public class DriverSupport {
 
 	public Object getIntrinsictProperty(WebElement element) {
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
-		Object attribute = executor.executeScript("var items = {}; " + "var arg = arguments[0]; "
-				+ "for (index = 0; index < arg.attributes.length; ++index) { "
-				+ "             items[arg.attributes[index].name] = arg.attributes[index].value " + "}; "
-				+ "return items;", element);
+		Object attribute = executor.executeScript("var items = {}; " 
+					+ "var arg = arguments[0]; "
+					+ "for (index = 0; index < arg.attributes.length; ++index) { "
+					+ "    items[arg.attributes[index].name] = arg.attributes[index].value " 
+					+ "}; "
+					+ "return items;", 
+				element);
 		return attribute;
 	}
 
