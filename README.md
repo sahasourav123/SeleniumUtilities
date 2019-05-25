@@ -3,6 +3,7 @@ Supporting utilities to develop automation suite with Java/Selenium.
 Web Automation and File Automation related basic reusable building blocks are put together for faster prototyping.
 
 ## Get Ready for Rapid Prototyping.
+
 ### Just Add this inside pom.xml
 ```
 <repositories>
@@ -24,6 +25,14 @@ Web Automation and File Automation related basic reusable building blocks are pu
   </dependency>
 </dependencies>
 ```
+
+### Get Compatible Driver
+Download compatible driver.exe.
+Place it in project folder.
+* [32-bit IE Driver](https://goo.gl/9Cqa4q)
+* [64-bit IE Driver](https://goo.gl/AtHQuv)
+* [Chrome Drivers](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+* [Gecko Drivers(Firefox)](https://github.com/mozilla/geckodriver/releases/)
 
 ### Create Broswser Instance
 ```
