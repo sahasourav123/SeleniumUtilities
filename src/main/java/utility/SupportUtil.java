@@ -24,6 +24,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import pojo.DesiredException;
+
 public class SupportUtil {
 
 	MyLogger logger;
@@ -263,5 +265,9 @@ public class SupportUtil {
 		}
 
 		return false;
+	}
+	
+	public String getTimestamp() {
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
 	}
 }
