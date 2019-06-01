@@ -39,10 +39,10 @@ public class Examples {
 		support.getElement(Keywords.Name, "address").sendKeys("Saha Maison");
 		support.getElement(Keywords.Name, "city").sendKeys("Kolkata");
 		support.getSelect(Keywords.Name, "state").selectByVisibleText("Texas");
-		support.sendKeys(Keywords.Name, "zip", "700093");
+		support.setText(Keywords.Name, "zip", "700093");
 		support.getElement("nameStartWith", "website").sendKeys("https://github.com/sahasourav123");
 		support.selectRadioOption(Keywords.Name, "hosting", "No");
-		support.sendKeys(Keywords.Name, "comment", "Selenium Utilities");
+		support.setText(Keywords.Name, "comment", "Selenium Utilities");
 		support.ScreenShot();
 		support.jsClick(Keywords.Xpath, "//button[@type='submit']");
 		wait.waitForPageLoad();
