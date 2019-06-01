@@ -1,4 +1,4 @@
-package utility;
+package pojo;
 
 /**
  * Throw this when a exception is expected and handle this in global exception handler 
