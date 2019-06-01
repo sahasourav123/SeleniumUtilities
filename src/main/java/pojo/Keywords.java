@@ -2,18 +2,23 @@ package pojo;
 
 public enum Keywords {
 	Name,
-	Id,
-	Xpath,
-	CSSSelector,
-	Class,
-	ClassName,
-	IdContains,
+	NameStartWith,
+	NameEndWith,
 	NameContains,
+	
+	Id,
 	IdStartWith,
 	IdEndWith,
-	LinkText,
-	PartialLinkText,
+	IdContains,
+	
+	Xpath,
+	CSSSelector,
+	
+	Class,
+	ClassName,
 	TagName,
-	NameStartWith,
-	NameEndWith;
+	
+	LinkText,
+	PartialLinkText;
+	
 }
