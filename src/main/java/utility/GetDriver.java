@@ -16,9 +16,16 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 
+import pojo.ThreadData;
+
 public class GetDriver {
 	WebDriver driver;
 	int implicit_wait = 10;
+	ThreadData threadData;
+	
+	public GetDriver() {
+		threadData = new ThreadData();
+	}
 
 	/**
 	 * Create an IE Driver Instance
@@ -43,7 +50,9 @@ public class GetDriver {
 
 		// Set browser zoom level 100%
 		driver.findElement(By.tagName("body")).sendKeys(Keys.chord(Keys.CONTROL, "0"));
-
+		
+		threadData.driver = driver;
+		Environment.ThreadPool.put(Thread.currentThread().getName(), threadData);
 		return driver;
 	}
 
@@ -64,6 +73,9 @@ public class GetDriver {
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);
 		if(initialURL.length()>0) driver.get(initialURL);
+		
+		threadData.driver = driver;
+		Environment.ThreadPool.put(Thread.currentThread().getName(), threadData);
 		return driver;
 	}
 
@@ -83,6 +95,9 @@ public class GetDriver {
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(implicit_wait, TimeUnit.SECONDS);
 		if(initialURL.length()>0) driver.get(initialURL);
+		
+		threadData.driver = driver;
+		Environment.ThreadPool.put(Thread.currentThread().getName(), threadData);
 		return driver;
 	}
 
