@@ -21,7 +21,7 @@ Web Automation and File Automation related basic reusable building blocks are pu
   <dependency>
     <groupId>automation</groupId>
     <artifactId>SeleniumUtilities</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6</version>
   </dependency>
 </dependencies>
 ```
