@@ -5,8 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
+import pojo.DesiredException;
+import pojo.Keywords;
 import utility.CustomWait;
-import utility.DesiredException;
 import utility.DriverSupport;
 import utility.GetDriver;
 
@@ -30,19 +31,21 @@ public class Examples {
 	}
 
 	@Test
-	public void test() throws DesiredException {
-		support.getElement("name", "first_name").sendKeys("Sourav");
-		support.getElement("name", "last_name").sendKeys("Saha");
-		support.getElement("name", "email").sendKeys("test.mail@gmail.com");
-		support.getElement("name", "phone").sendKeys("9876543210");
-		support.getElement("name", "address").sendKeys("Saha Maison");
-		support.getElement("name", "city").sendKeys("Kolkata");
-		support.getElement("name", "zip").sendKeys("700093");
-		support.getElement("name", "website").sendKeys("https://github.com/sahasourav123");
-		support.getElement("name", "comment").sendKeys("Selenium Utilities");
+	public void test_01() throws DesiredException {
+		support.getElement(Keywords.Name, "first_name").sendKeys("Sourav");
+		support.getElement(Keywords.NameContains, "last_name").sendKeys("Saha");
+		support.getElement(Keywords.NameStartWith, "email").sendKeys("test.mail@gmail.com");
+		support.getElement(Keywords.NameEndWith, "phone").sendKeys("9876543210");
+		support.getElement(Keywords.Name, "address").sendKeys("Saha Maison");
+		support.getElement(Keywords.Name, "city").sendKeys("Kolkata");
+		support.getSelect(Keywords.Name, "state").selectByVisibleText("Texas");
+		support.sendKeys(Keywords.Name, "zip", "700093");
+		support.getElement("nameStartWith", "website").sendKeys("https://github.com/sahasourav123");
+		support.selectRadioOption(Keywords.Name, "hosting", "No");
+		support.sendKeys(Keywords.Name, "comment", "Selenium Utilities");
 		support.ScreenShot();
-		support.jsClick("xpath", "//button[@type='submit']");
+		support.jsClick(Keywords.Xpath, "//button[@type='submit']");
 		wait.waitForPageLoad();
 	}
-
+	
 }
