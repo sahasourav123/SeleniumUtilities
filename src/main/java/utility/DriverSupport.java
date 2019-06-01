@@ -19,10 +19,15 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import pojo.DesiredException;
+import pojo.Keywords;
 import pojo.ThreadData;
 import utility.CustomWait;
+
+
 
 public class DriverSupport {
 
@@ -30,17 +35,13 @@ public class DriverSupport {
 	MyLogger logger;
 	String threadName;
 	ThreadData threadData;
-
+	SupportUtil util;
+	
 	public DriverSupport(WebDriver driver) {
 		this.driver = driver;
-		threadName = Thread.currentThread().getName();
-		threadData = Environment.ThreadPool.get(threadName);
-		this.logger = new MyLogger(
-				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
-	}
-
-	public DriverSupport() {
-		threadName = Thread.currentThread().getName();
+		this.util = new SupportUtil();
+		this.threadName = Thread.currentThread().getName();
+		this.threadData = Environment.ThreadPool.get(threadName);
 		this.logger = new MyLogger(
 				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
@@ -85,7 +86,7 @@ public class DriverSupport {
 	 * @param locatorType[as String]
 	 * @param locatorValue[as String]
 	 */
-	public void jsClick(String locatorType, String locatorValue) {
+	public void jsClick(Keywords locatorType, String locatorValue) {
 		WebElement element = driver.findElement(customLocator(locatorType, locatorValue));
 		jsElement(element);
 	}
@@ -214,6 +215,10 @@ public class DriverSupport {
 	 * @param locatorValue - locator value as per HTML
 	 * @return
 	 */
+	public By customLocator(Keywords locatorType, String locatorValue) {
+		return customLocator(locatorType.toString(), locatorValue);
+	}
+	
 	public By customLocator(String locatorType, String locatorValue) {
 		By byLocator = null;
 		switch (locatorType.toLowerCase()) {
@@ -300,6 +305,50 @@ public class DriverSupport {
 			return driver.findElement(locator);
 		} else {
 			throw new DesiredException("Disable Element: " + locatorType + " -> " + locatorValue);
+		}
+	}
+	
+	public WebElement getElement(Keywords locatorType, String locatorValue) throws DesiredException {
+		return getElement(locatorType.toString(), locatorValue);
+	}
+	
+	public Select getSelect(Keywords locatorType, String locatorValue) throws DesiredException {
+		return new Select(getElement(locatorType.toString(), locatorValue));
+	}
+	
+	public Select getSelect(String locatorType, String locatorValue) throws DesiredException {
+		return new Select(getElement(locatorType, locatorValue));
+	}
+	
+	public boolean selectRadioOption(Keywords locatorType, String locatorValue, String optionValue) {
+		String xpath = "//input[@" + locatorType.toString().toLowerCase() + "='" + locatorValue 
+				+ "' and @value='" + optionValue.toLowerCase() + "']";
+		try {
+			jsClick(Keywords.Xpath, xpath);
+			return true;
+		} catch (Exception e) {
+			logger.error("Not Found: xpath-> " + xpath);
+			return false;
+		}
+	}
+	
+	public boolean selectDropdownOption(Keywords locatorType, String locatorValue, String optionValue) {
+		try {
+			getSelect(locatorType, locatorValue).selectByVisibleText(optionValue);
+			return true;
+		} catch (DesiredException e) {
+			logger.error("Not Found: " + locatorType + "-> " + locatorValue);
+			return false;
+		}
+	}
+	
+	public boolean setText(Keywords locatorType, String locatorValue, String text) {
+		try {
+			getElement(locatorType, locatorValue).sendKeys(text);
+			return true;
+		} catch (DesiredException e) {
+			logger.error("Not Found: " + locatorType + "-> " + locatorValue);
+			return false;
 		}
 	}
 
@@ -455,11 +504,10 @@ public class DriverSupport {
 	}
 
 	public boolean ScreenShot() {
-		long timeStamp = System.currentTimeMillis();
 		File reportFolder = new File("Report");
 		if (!reportFolder.exists())
 			reportFolder.mkdirs();
-		String screenShotFileName = "Report\\Screen_" + timeStamp;
+		String screenShotFileName = "Report\\Screen_" + util.getTimestamp();
 		return ScreenShot(screenShotFileName);
 	}
 
