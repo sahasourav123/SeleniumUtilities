@@ -1,4 +1,4 @@
-# Selenium Utilities
+# Selenium Utilities ![](https://img.shields.io/badge/build-passing-success.svg) ![](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg)
 Supporting utilities to develop automation suite with Java/Selenium.
 Web Automation and File Automation related basic reusable building blocks are put together for faster prototyping.
 
