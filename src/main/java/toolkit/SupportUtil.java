@@ -1,4 +1,4 @@
-package utility;
+package toolkit;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +25,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import pojo.DesiredException;
+import utility.MyLogger;
 
 public class SupportUtil {
 
@@ -124,12 +125,23 @@ public class SupportUtil {
 	}
 
 	// Get Machine IP
-	public String machineIP() {
+	public String getMachineIP() {
 		String thismachineIP = null;
 		try {
 			thismachineIP = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
-			thismachineIP = "Unknown";
+			thismachineIP = "IP_Not_Found";
+		}
+		return thismachineIP;
+	}
+	
+	// Get Machine IP
+	public String getMachineName() {
+		String thismachineIP = null;
+		try {
+			thismachineIP = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			thismachineIP = "Name_Not_Found";
 		}
 		return thismachineIP;
 	}
@@ -268,6 +280,6 @@ public class SupportUtil {
 	}
 	
 	public String getTimestamp() {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+		return new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS").format(new Date());
 	}
 }

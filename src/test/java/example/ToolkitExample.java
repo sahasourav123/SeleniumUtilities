@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import utility.SupportUtil;
+import toolkit.SupportUtil;
 
-public class Example2 {
+public class ToolkitExample {
 	
 	SupportUtil util;
 
@@ -31,7 +31,7 @@ public class Example2 {
 
 	@Test
 	public void test() {
-		util.getTimestamp();
+		System.out.println(util.getTimestamp());
 	}
 
 }

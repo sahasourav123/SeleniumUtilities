@@ -25,8 +25,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pojo.DesiredException;
 import pojo.Keywords;
 import pojo.ThreadData;
+import toolkit.SupportUtil;
 import utility.CustomWait;
-
 
 
 public class DriverSupport {
@@ -42,8 +42,7 @@ public class DriverSupport {
 		this.util = new SupportUtil();
 		this.threadName = Thread.currentThread().getName();
 		this.threadData = Environment.ThreadPool.get(threadName);
-		this.logger = new MyLogger(
-				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
+		this.logger = new MyLogger(Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
 
 	/**
@@ -319,38 +318,6 @@ public class DriverSupport {
 	public Select getSelect(String locatorType, String locatorValue) throws DesiredException {
 		return new Select(getElement(locatorType, locatorValue));
 	}
-	
-	public boolean selectRadioOption(Keywords locatorType, String locatorValue, String optionValue) {
-		String xpath = "//input[@" + locatorType.toString().toLowerCase() + "='" + locatorValue 
-				+ "' and @value='" + optionValue.toLowerCase() + "']";
-		try {
-			jsClick(Keywords.Xpath, xpath);
-			return true;
-		} catch (Exception e) {
-			logger.error("Not Found: xpath-> " + xpath);
-			return false;
-		}
-	}
-	
-	public boolean selectDropdownOption(Keywords locatorType, String locatorValue, String optionValue) {
-		try {
-			getSelect(locatorType, locatorValue).selectByVisibleText(optionValue);
-			return true;
-		} catch (DesiredException e) {
-			logger.error("Not Found: " + locatorType + "-> " + locatorValue);
-			return false;
-		}
-	}
-	
-	public boolean setText(Keywords locatorType, String locatorValue, String text) {
-		try {
-			getElement(locatorType, locatorValue).sendKeys(text);
-			return true;
-		} catch (DesiredException e) {
-			logger.error("Not Found: " + locatorType + "-> " + locatorValue);
-			return false;
-		}
-	}
 
 	public boolean isElement(By locator) {
 		try {
@@ -490,15 +457,16 @@ public class DriverSupport {
 	}
 
 	public boolean ScreenShot(String fileName) {
+		String fileAs = "";
 		try {
 			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			String fileAs = fileName + ".png";
+			fileAs = fileName + ".png";
 			FileUtils.copyFile(scrFile, new File(fileAs));
 			logger.info("Screenshot Saved Successfully: " + fileAs);
 			return true;
 
 		} catch (Exception e) {
-			logger.warning("Failed to capture Screenshot: " + e.getMessage());
+			logger.warning("Failed to capture Screenshot: " + fileAs + e.getMessage());
 			return false;
 		}
 	}

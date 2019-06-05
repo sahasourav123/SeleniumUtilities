@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import pojo.DesiredException;
 import pojo.Keywords;
 import utility.CustomWait;
+import utility.DriverAction;
 import utility.DriverSupport;
 import utility.GetDriver;
 
@@ -15,6 +16,7 @@ public class Examples {
 
 	WebDriver driver;
 	DriverSupport support;
+	DriverAction action;
 	CustomWait wait;
 	
 	@Before
@@ -23,6 +25,7 @@ public class Examples {
 		driver = new GetDriver().chromeDriver(url);
 		support = new DriverSupport(driver);
 		wait = new CustomWait(driver);
+		action = new DriverAction(driver);
 	}
 
 	@After
@@ -32,17 +35,17 @@ public class Examples {
 
 	@Test
 	public void test_01() throws DesiredException {
-		support.getElement(Keywords.Name, "first_name").sendKeys("Sourav");
-		support.getElement(Keywords.NameContains, "last_name").sendKeys("Saha");
-		support.getElement(Keywords.NameStartWith, "email").sendKeys("test.mail@gmail.com");
-		support.getElement(Keywords.NameEndWith, "phone").sendKeys("9876543210");
-		support.getElement(Keywords.Name, "address").sendKeys("Saha Maison");
-		support.getElement(Keywords.Name, "city").sendKeys("Kolkata");
-		support.getSelect(Keywords.Name, "state").selectByVisibleText("Texas");
-		support.setText(Keywords.Name, "zip", "700093");
-		support.getElement("nameStartWith", "website").sendKeys("https://github.com/sahasourav123");
-		support.selectRadioOption(Keywords.Name, "hosting", "No");
-		support.setText(Keywords.Name, "comment", "Selenium Utilities");
+		action.setText(Keywords.Name, "first_name", "Sourav");
+		action.setText(Keywords.NameStartWith, "last_name", "Saha");
+		action.setText(Keywords.NameEndWith, "email", "test.mail@gmail.com");
+		action.setText(Keywords.NameContains, "phone", "9876543210");
+		action.setText(Keywords.Name, "address", "Saha Maison");
+		action.setText(Keywords.Name, "city", "Kolkata");
+		action.selectDropdownOption(Keywords.Name, "state", "Texas");
+		action.setText(Keywords.Name, "zip", "700093");
+		action.setText(Keywords.Name, "website", "https://github.com/sahasourav123");
+		action.selectRadioOption(Keywords.Name, "hosting", "No");
+		action.setText(Keywords.Name, "comment", "Selenium Utilities");
 		support.ScreenShot();
 		support.jsClick(Keywords.Xpath, "//button[@type='submit']");
 		wait.waitForPageLoad();
