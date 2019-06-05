@@ -21,7 +21,7 @@ Web Automation and File Automation related basic reusable building blocks are pu
   <dependency>
     <groupId>automation</groupId>
     <artifactId>SeleniumUtilities</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
   </dependency>
 </dependencies>
 ```
@@ -53,6 +53,18 @@ driver = new GetDriver().ieDriver(url);
 Create Firefox Driver Instance without Initial URL
 ```
 driver = new GetDriver().firefoxDriver();
+```
+
+Rapid Data Entry Object (Wrapper on DriverSupport Class)
+```
+DriverAction action = new DriverAction(driver);
+```
+SendKeys/ Select From Dropdown & SelectRadioButton using DriverAction (all One-liner)
+```
+action.setText(Keywords.Name, "first_name", "Sourav");
+action.selectDropdownOption(Keywords.Name, "state", "Texas");
+action.selectRadioOption(Keywords.Name, "hosting", "No");
+support.jsClick(Keywords.Xpath, "//button[@type='submit']");
 ```
 DriverSupport Object handles interaction with WebElement 
  ```
