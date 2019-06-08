@@ -102,3 +102,5 @@ status = wait.explicitWait(8, byElement);
 status = wait.waitForInvisibilityOfElement(5, Keywords.IdContains, "Partial_id_of_element");
 status = wait.waitForStalenessOfElement(5, Keywords.Xapth, "XPath_of_element");
 ```
+### How the architecture looks like
+![Architecture](architecture.png)
