@@ -1,6 +1,9 @@
-# Selenium Utilities ![](https://img.shields.io/badge/build-passing-success.svg) ![](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg)
+# Selenium Utilities 
+![](https://img.shields.io/badge/build-passing-success.svg) ![](https://img.shields.io/badge/Java->=8(update%20181)-blue.svg) ![](https://img.shields.io/badge/maintenance-weekly-brightgreen.svg) ![](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![](https://img.shields.io/badge/version-1.0.7-blue.svg)
+
 Supporting utilities to develop automation suite with Java/Selenium.
 Web Automation and File Automation related basic reusable building blocks are put together for faster prototyping.
+Test Automation Framework as API.
 
 ## Get Ready for Rapid Prototyping.
 
@@ -27,7 +30,7 @@ Web Automation and File Automation related basic reusable building blocks are pu
 ```
 
 ### Example
-Automation Script using this [Utility API](https://github.com/sahasourav123/SeleniumUtilities/blob/master/src/test/java/example/Examples.java)
+[See Example](https://github.com/sahasourav123/SeleniumUtilities/blob/master/src/test/java/example/Examples.java) using this Utility Library.
 
 ### Get Compatible Driver
 Download compatible driver.exe.
@@ -55,6 +58,10 @@ Create Firefox Driver Instance without Initial URL
 driver = new GetDriver().firefoxDriver();
 ```
 
+DriverSupport Object handles interaction with WebElement 
+ ```
+DriverSupport support = new DriverSupport(driver);
+```
 Rapid Data Entry Object (Wrapper on DriverSupport Class)
 ```
 DriverAction action = new DriverAction(driver);
@@ -66,14 +73,17 @@ action.selectDropdownOption(Keywords.Name, "state", "Texas");
 action.selectRadioOption(Keywords.Name, "hosting", "No");
 support.jsClick(Keywords.Xpath, "//button[@type='submit']");
 ```
-DriverSupport Object handles interaction with WebElement 
+
+ Find a WebElement or perform an action quickly using Keywords enum and :
+ 
+ ![](https://img.shields.io/badge/-Name-yellowgreen.svg) ![](https://img.shields.io/badge/-NameContains-yellowgreen.svg) ![](https://img.shields.io/badge/-NameStartWith-yellowgreen.svg) ![](https://img.shields.io/badge/-NameEndWith-yellowgreen.svg)
+ 
+![](https://img.shields.io/badge/-Xpath-yellowgreen.svg) ![](https://img.shields.io/badge/-Id-yellowgreen.svg) ![](https://img.shields.io/badge/-IdContains-yellowgreen.svg) ![](https://img.shields.io/badge/-IdStartWith-yellowgreen.svg) ![](https://img.shields.io/badge/-IdEndWith-yellowgreen.svg)
+
+ ![](https://img.shields.io/badge/-CSSSelector-yellowgreen.svg) ![](https://img.shields.io/badge/-ClassName-yellowgreen.svg) ![](https://img.shields.io/badge/-Class-yellowgreen.svg) ![](https://img.shields.io/badge/-LinkText-yellowgreen.svg) ![](https://img.shields.io/badge/-PartialLinkText-yellowgreen.svg) ![](https://img.shields.io/badge/-TagName-yellowgreen.svg)
+ 
  ```
-DriverSupport support = new DriverSupport(driver);
-```
- Find a WebElement quickly using Keywords(Case In-Sensitive):
- *  name, nameContains,nameStartWith, nameEndWith, id, idContains,idStartWith, idEndWith, CSSSelector, class, ClassName, linkText, PartialLinkText, TagName
- ```
-By byElement = support.customLocator("idStartWith", "Quote");
+By byElement = support.customLocator(Keywords.IdStartWith, "Quote");
 ```
 Check if Element present in dom
 ```
