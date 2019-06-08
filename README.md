@@ -44,17 +44,14 @@ Place it in project folder.
 ```
 WebDriver driver;
 String url = "https://github.com/sahasourav123/SeleniumUtilities";
-```
-Create Chrome Driver Instance with initial URL
-```
+
+// Create Chrome Driver Instance with initial URL
 driver = new GetDriver().chromeDriver(url);
-```
-Create IE Driver Instance with Initial URL
-```
+
+// Create IE Driver Instance with Initial URL
 driver = new GetDriver().ieDriver(url);
-```
-Create Firefox Driver Instance without Initial URL
-```
+
+// Create Firefox Driver Instance without Initial URL
 driver = new GetDriver().firefoxDriver();
 ```
 
@@ -102,6 +99,6 @@ Wait up-to specified seconds for a element and return boolean status
 ```
 boolean status;
 status = wait.explicitWait(8, byElement);
-status = wait.waitForInvisibilityOfElement(5, "idContains", "Partial_name_of_element");
-status = wait.waitForStalenessOfElement(5, "xapth", "XPath_of_element");
+status = wait.waitForInvisibilityOfElement(5, Keywords.IdContains, "Partial_id_of_element");
+status = wait.waitForStalenessOfElement(5, Keywords.Xapth, "XPath_of_element");
 ```
