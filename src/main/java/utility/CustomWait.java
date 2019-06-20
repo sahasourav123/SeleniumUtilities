@@ -1,5 +1,7 @@
 package utility;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -7,6 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import pojo.Keywords;
 
 public class CustomWait {
 	WebDriver driver;
@@ -43,7 +47,7 @@ public class CustomWait {
 		}
 	}
 
-	public boolean explicitWait(int timeToWait, String howToIdentify, String elementId) {
+	public boolean explicitWait(int timeToWait, Keywords howToIdentify, String elementId) {
 		By locator = support.customLocator(howToIdentify, elementId);
 		return explicitWait(timeToWait, locator);
 	}
@@ -59,15 +63,17 @@ public class CustomWait {
 	}
 
 	// explicit wait for an element in a frame
-	public void explicitFrameWait(int timeToWait, String howToIdentify, String elementId, String frame) {
-		support.switchToFrameWithWait(frame);
-		explicitWait(timeToWait, howToIdentify, elementId);
+	public void explicitWaitFrameElement(int timeToWait, Keywords howToIdentify, String elementId, List<String> nestedFrames) {
+		if(support.switchToFrameWithWait(nestedFrames, timeToWait)) {
+			explicitWait(timeToWait, howToIdentify, elementId);
+		}
 	}
 
 	// explicit wait for an element in frame
-	public void explicitWindowWait(int timeToWait, String howToIdentify, String elementId, String window) {
-		support.switchToWindow(window);
-		explicitWait(timeToWait, howToIdentify, elementId);
+	public void explicitWaitWindowElement(int timeToWait, Keywords howToIdentify, String elementId, String window) {
+		if(support.switchToWindow(window, timeToWait)) {
+			explicitWait(timeToWait, howToIdentify, elementId);
+		}
 	}
 
 	public boolean staleWait(int timeToWait, WebElement element) {
@@ -81,7 +87,7 @@ public class CustomWait {
 		}
 	}
 
-	public boolean enableWait(int timeToWait, String howToIdentify, String elementId) {
+	public boolean enableWait(int timeToWait, Keywords howToIdentify, String elementId) {
 		By locator = support.customLocator(howToIdentify, elementId);
 		return enableWait(timeToWait, locator);
 	}
@@ -97,7 +103,7 @@ public class CustomWait {
 		}
 	}
 
-	public boolean waitForElementWithoutException(int timeToWait, String howToIdentify, String elementId) {
+	public boolean waitForElementWithoutException(int timeToWait, Keywords howToIdentify, String elementId) {
 		try {
 			explicitWait(timeToWait, howToIdentify, elementId);
 			return true;
@@ -107,7 +113,7 @@ public class CustomWait {
 
 	}
 
-	public boolean waitForStalenessOfElement(int timeToWait, String howToIdentify, String elementId) {
+	public boolean waitForStalenessOfElement(int timeToWait, Keywords howToIdentify, String elementId) {
 		WebDriverWait wait = new WebDriverWait(driver, timeToWait);
 		By locator = support.customLocator(howToIdentify, elementId);
 		WebElement element = driver.findElement(locator);
@@ -120,7 +126,7 @@ public class CustomWait {
 		}
 	}
 
-	public boolean waitForInvisibilityOfElement(int timeToWait, String howToIdentify, String elementId) {
+	public boolean waitForInvisibilityOfElement(int timeToWait, Keywords howToIdentify, String elementId) {
 		WebDriverWait wait = new WebDriverWait(driver, timeToWait);
 		By locator = support.customLocator(howToIdentify, elementId);
 
@@ -132,7 +138,7 @@ public class CustomWait {
 		}
 	}
 
-	public void waitForElementWithinFrame(int timeToWait, String frameNames, String howToIdentify, String elementId)
+	public void waitForElementWithinFrame(int timeToWait, String frameNames, Keywords howToIdentify, String elementId)
 			throws Exception {
 		support.switchToFrame(frameNames, ",");
 		explicitWait(timeToWait, howToIdentify, elementId);
