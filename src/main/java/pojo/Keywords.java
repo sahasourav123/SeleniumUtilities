@@ -14,7 +14,6 @@ public enum Keywords {
 	Xpath,
 	CSSSelector,
 	
-	Class,
 	ClassName,
 	TagName,
 	
