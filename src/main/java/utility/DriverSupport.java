@@ -28,7 +28,6 @@ import pojo.ThreadData;
 import toolkit.SupportUtil;
 import utility.CustomWait;
 
-
 public class DriverSupport {
 
 	WebDriver driver;
@@ -36,17 +35,19 @@ public class DriverSupport {
 	String threadName;
 	ThreadData threadData;
 	SupportUtil util;
-	
+
 	public DriverSupport(WebDriver driver) {
 		this.driver = driver;
 		this.util = new SupportUtil();
 		this.threadName = Thread.currentThread().getName();
 		this.threadData = Environment.ThreadPool.get(threadName);
-		this.logger = new MyLogger(Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
+		this.logger = new MyLogger(
+				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
 
 	/**
 	 * Click on a WebElement identified by 'id'
+	 * 
 	 * @param id[as String]
 	 */
 	public void jsId(String id) {
@@ -56,6 +57,7 @@ public class DriverSupport {
 
 	/**
 	 * Click on a WebElement identified by 'xpath'
+	 * 
 	 * @param xapth[as String]
 	 */
 	public void jsXpath(String xpath) {
@@ -65,6 +67,7 @@ public class DriverSupport {
 
 	/**
 	 * Click on a WebElement identified by 'By' object
+	 * 
 	 * @param by[as By Object]
 	 */
 	public void jsElement(By byElement) {
@@ -74,6 +77,7 @@ public class DriverSupport {
 
 	/**
 	 * Click on a WebElement
+	 * 
 	 * @param element[as WebElement]
 	 */
 	public void jsElement(WebElement element) {
@@ -82,7 +86,8 @@ public class DriverSupport {
 
 	/**
 	 * Click on WebElement identified by locator name and value
-	 * @param locatorType[as String]
+	 * 
+	 * @param locatorType[as  String]
 	 * @param locatorValue[as String]
 	 */
 	public void jsClick(Keywords locatorType, String locatorValue) {
@@ -91,7 +96,8 @@ public class DriverSupport {
 	}
 
 	/**
-	 * Switch to Frame without wait 
+	 * Switch to Frame without wait
+	 * 
 	 * @param frameNames
 	 * @param seperator
 	 * @return
@@ -101,7 +107,7 @@ public class DriverSupport {
 		String[] frames = frameNames.split(seperator);
 		return switchToFrame(Arrays.asList(frames));
 	}
-	
+
 	public boolean switchToFrame(List<String> frames) {
 
 		try {
@@ -114,40 +120,46 @@ public class DriverSupport {
 			return false;
 		}
 	}
-	
 
 	// Switch to Frame with Wait for the frame to be available
-	public void switchToFrameWithWait(String frameNames) {
+	public boolean switchToFrameWithWait(List<String> nestedFrames, int timeOutSec) {
 		driver.switchTo().defaultContent();
 		WebDriverWait frameWait = new WebDriverWait(driver, 30);
-		String[] frames = frameNames.split("~");
+		boolean status = false;
 
-		for (String frameName : frames) {
+		for (String frameName : nestedFrames) {
+			status = false;
 
 			try {
 				frameWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameName));
 				logger.debug("Switched to Frame: " + frameName);
+				status = true;
 
 			} catch (JavascriptException | StaleElementReferenceException jse) {
 				boolean exitLoop = true;
 				int counter = -1;
 				do {
 					try {
-						logger.debug("Frame Switching Failed : " + frameName + " >> Trying Again");
-						new CustomWait(driver).staticWait(2);
+						logger.debug("Frame Switching Failed : " + frameName + " >> Attempt: " + (counter + 1));
+						new CustomWait(driver).staticWait(1);
 						frameWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameName));
 						exitLoop = false;
-						logger.debug("Switched to Frame: " + frameNames);
+						logger.debug("Switched to Frame: " + frameName);
+						status = true;
 
 					} catch (Exception e) {
 					}
-				} while (exitLoop && ++counter < 10);
+
+				} while (exitLoop && ++counter < timeOutSec);
 			}
 		}
+
+		threadData.frameStack.add(nestedFrames.toString());
+		return status;
 	}
 
 	// Switch to Window with Wait for the window to be available
-	public boolean switchToWindow(String windowName) {
+	public boolean switchToWindow(String windowName, int timeOutSec) {
 
 		// Return if current window frame is the desired window
 		try {
@@ -157,30 +169,25 @@ public class DriverSupport {
 		}
 
 		int counter = -1;
+		String windowNameFormatted = windowName.toLowerCase().replace("*", "");
 
 		do {
+			new CustomWait(driver).staticWait(1);
 			for (String handle : driver.getWindowHandles()) {
-				String windowTitle = driver.switchTo().window(handle).getTitle();
-				if (windowTitle.equals(windowName)) {
-					driver.switchTo().window(handle);
-					logger.debug("Current Window: " + windowName);
-					return true;
+				String windowTitle = driver.switchTo().window(handle).getTitle().toLowerCase();
 
-				} else if (windowName.startsWith("*") && windowTitle.toLowerCase().endsWith(windowName)) {
+				if (windowTitle.equals(windowName)
+						|| (windowName.startsWith("*") && windowTitle.endsWith(windowNameFormatted))
+						|| (windowTitle.startsWith(windowNameFormatted) && windowName.endsWith("*"))
+						|| (windowName.startsWith("*") && windowTitle.contains(windowNameFormatted) && windowName.endsWith("*"))) {
 					driver.switchTo().window(handle);
-					logger.debug("Current Window: " + windowTitle);
-					return true;
-
-				} else if (windowName.endsWith("*") && windowTitle.toLowerCase().startsWith(windowName)) {
-					driver.switchTo().window(handle);
-					logger.debug("Current Window: " + windowTitle);
+					logger.debug("Switched to Window: " + windowName);
+					threadData.windowStack.add(windowTitle);
 					return true;
 				}
-
 			}
 
-			new CustomWait(driver).staticWait(2);
-		} while (++counter < 5);
+		} while (++counter < timeOutSec);
 
 		logger.warning("Window not Found: " + windowName);
 		return false;
@@ -203,82 +210,84 @@ public class DriverSupport {
 			return false;
 		String windowName = windowStack.get(stackSize - 2);
 		windowStack.remove(stackSize - 1);
-		return switchToWindow(windowName);
+		return switchToWindow(windowName, 5);
+	}
+
+	public boolean switchToLastWindow() {
+		ArrayList<String> windowStack = threadData.windowStack;
+		int stackSize = windowStack.size();
+		if (stackSize < 2)
+			return false;
+		String windowName = windowStack.get(stackSize - 1);
+		return switchToWindow(windowName, 5);
 	}
 
 	/**
-	 * Create By Object from locator name and value
-	 * Supported locator: name, id, xpath, CSSSelector, class, ClassName, idContains, nameContains,
-	 * idStartWith, idEndWith, linkText, PartialLinkText, TagName, nameStartWith, nameEndWith
-	 * @param locatorType - keyword for locator 
+	 * Create By Object from locator name and value Supported locator: name, id,
+	 * xpath, CSSSelector, class, ClassName, idContains, nameContains, idStartWith,
+	 * idEndWith, linkText, PartialLinkText, TagName, nameStartWith, nameEndWith
+	 * 
+	 * @param locatorType  - keyword for locator
 	 * @param locatorValue - locator value as per HTML
 	 * @return
 	 */
 	public By customLocator(Keywords locatorType, String locatorValue) {
-		return customLocator(locatorType.toString(), locatorValue);
-	}
-	
-	public By customLocator(String locatorType, String locatorValue) {
 		By byLocator = null;
-		switch (locatorType.toLowerCase()) {
-		case "id":
+		switch (locatorType) {
+		case Id:
 			byLocator = By.id(locatorValue);
 			break;
-			
-		case "idcontains":
+
+		case IdContains:
 			byLocator = By.xpath("//*[contains(@id,'" + locatorValue + "')]");
 			break;
-			
-		case "idstartwith":
+
+		case IdStartWith:
 			byLocator = By.cssSelector("[id^=" + locatorValue + "]");
 			break;
-			
-		case "idendwith":
+
+		case IdEndWith:
 			byLocator = By.cssSelector("[id$=" + locatorValue + "]");
 			break;
-			
-		case "cssselector":
+
+		case CSSSelector:
 			byLocator = By.cssSelector(locatorValue);
 			break;
-			
-		case "xpath":
+
+		case Xpath:
 			byLocator = By.xpath(locatorValue);
 			break;
-			
-		case "name":
+
+		case Name:
 			byLocator = By.name(locatorValue);
 			break;
-			
-		case "namecontains":
+
+		case NameContains:
 			byLocator = By.xpath("//*[contains(@name,'" + locatorValue + "')]");
 			break;
-			
-		case "namestartwith":
+
+		case NameStartWith:
 			byLocator = By.cssSelector("[name^=" + locatorValue + "]");
 			break;
-			
-		case "nameendwith":
+
+		case NameEndWith:
 			byLocator = By.cssSelector("[name$=" + locatorValue + "]");
 			break;
-			
-		case "class":
-		case "classname":
+
+		case ClassName:
 			byLocator = By.className(locatorValue);
 			break;
-			
-		case "linktext":
+
+		case LinkText:
 			byLocator = By.linkText(locatorValue);
 			break;
-			
-		case "partialLinkText":
+
+		case PartialLinkText:
 			byLocator = By.partialLinkText(locatorValue);
 			break;
-			
-		case "tagname":
+
+		case TagName:
 			byLocator = By.tagName(locatorValue);
-			break;
-			
-		case "NA":
 			break;
 
 		default:
@@ -295,7 +304,7 @@ public class DriverSupport {
 	 * @return
 	 * @throws ElementNotVisibleException
 	 */
-	public WebElement getElement(String locatorType, String locatorValue) throws DesiredException {
+	public WebElement getElement(Keywords locatorType, String locatorValue) throws DesiredException {
 		By locator = customLocator(locatorType, locatorValue);
 		new CustomWait(driver).explicitWait(10, locatorType, locatorValue);
 
@@ -306,16 +315,8 @@ public class DriverSupport {
 			throw new DesiredException("Disable Element: " + locatorType + " -> " + locatorValue);
 		}
 	}
-	
-	public WebElement getElement(Keywords locatorType, String locatorValue) throws DesiredException {
-		return getElement(locatorType.toString(), locatorValue);
-	}
-	
+
 	public Select getSelect(Keywords locatorType, String locatorValue) throws DesiredException {
-		return new Select(getElement(locatorType.toString(), locatorValue));
-	}
-	
-	public Select getSelect(String locatorType, String locatorValue) throws DesiredException {
 		return new Select(getElement(locatorType, locatorValue));
 	}
 
@@ -328,7 +329,7 @@ public class DriverSupport {
 		}
 	}
 
-	public boolean isElement(String locatorType, String locatorValue) {
+	public boolean isElement(Keywords locatorType, String locatorValue) {
 		try {
 			driver.findElement(customLocator(locatorType, locatorValue));
 			return true;
@@ -340,15 +341,6 @@ public class DriverSupport {
 	public boolean isChildElement(WebElement parentElement, By locator) {
 		try {
 			parentElement.findElement(locator);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-	
-	public boolean isChildElement(WebElement parentElement, String locatorType, String locatorValue) {
-		try {
-			parentElement.findElement(customLocator(locatorType, locatorValue));
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -431,12 +423,9 @@ public class DriverSupport {
 
 	public Object getIntrinsictProperty(WebElement element) {
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
-		Object attribute = executor.executeScript("var items = {}; " 
-					+ "var arg = arguments[0]; "
-					+ "for (index = 0; index < arg.attributes.length; ++index) { "
-					+ "    items[arg.attributes[index].name] = arg.attributes[index].value " 
-					+ "}; "
-					+ "return items;", 
+		Object attribute = executor.executeScript("var items = {}; " + "var arg = arguments[0]; "
+				+ "for (index = 0; index < arg.attributes.length; ++index) { "
+				+ "    items[arg.attributes[index].name] = arg.attributes[index].value " + "}; " + "return items;",
 				element);
 		return attribute;
 	}
@@ -457,10 +446,9 @@ public class DriverSupport {
 	}
 
 	public boolean ScreenShot(String fileName) {
-		String fileAs = "";
+		String fileAs = fileName + ".png";
 		try {
 			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			fileAs = fileName + ".png";
 			FileUtils.copyFile(scrFile, new File(fileAs));
 			logger.info("Screenshot Saved Successfully: " + fileAs);
 			return true;
@@ -479,23 +467,4 @@ public class DriverSupport {
 		return ScreenShot(screenShotFileName);
 	}
 
-	public boolean validateEnvironment() throws DesiredException {
-		String pageTitle = driver.getTitle();
-		if (pageTitle.contains("This page can’t be displayed") || pageTitle.contains("Forbidden")
-				|| pageTitle.contains("Error") || pageTitle.contains("Bad Gateway") || pageTitle.contains("OpenAM")
-				|| pageTitle.contains("Not Found")) {
-			throw new DesiredException("Environment Unavailable : " + pageTitle);
-		}
-		return true;
-	}
-
-	public void validateLogin() throws DesiredException {
-		String pageTitle = driver.getTitle();
-		if (pageTitle.contains("attempt to login has been unsuccessful")) {
-			throw new DesiredException("Incorrect UserId/Password");
-
-		} else {
-			validateEnvironment();
-		}
-	}
 }
