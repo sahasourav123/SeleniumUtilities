@@ -24,6 +24,7 @@ public class GetDriver {
 	ThreadData threadData;
 	
 	public GetDriver() {
+		System.err.println("Contributed by: Sourav Saha. \nFeedback/Suggestion - <sahasourav123@gmail.com>");
 		threadData = new ThreadData();
 	}
 
@@ -32,6 +33,9 @@ public class GetDriver {
 	 * @param initialURL
 	 * @return
 	 */
+	public WebDriver ieDriver() {
+		return ieDriver("");
+	}
 	public WebDriver ieDriver(String initialURL) {
 
 		System.setProperty("webdriver.ie.driver", "IEDriverServer.exe");
