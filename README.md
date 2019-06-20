@@ -24,9 +24,21 @@ Test Automation Framework as API.
   <dependency>
     <groupId>automation</groupId>
     <artifactId>SeleniumUtilities</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
   </dependency>
 </dependencies>
+
+<build>
+  <plugins>
+    <plugin>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
 ```
 
 ### Example
