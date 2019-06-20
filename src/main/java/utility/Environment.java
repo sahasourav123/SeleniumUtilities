@@ -16,7 +16,8 @@ public class Environment {
 	
 	public static boolean ScreenshotFlag = false, DebugFlag = false;
 	public static String MachineIP = new SupportUtil().getMachineIP();
-	public static Map<String, ThreadData> ThreadPool = new HashMap<String, ThreadData>();;
+	public static String MachineName = new SupportUtil().getMachineName();
+	public static Map<String, ThreadData> ThreadPool = new HashMap<String, ThreadData>();
 
 	public static boolean isScreenshotFlag() {
 		return ScreenshotFlag;
@@ -36,6 +37,10 @@ public class Environment {
 
 	public static String getMachineIP() {
 		return MachineIP;
+	}
+	
+	public static String getMachineName() {
+		return MachineName;
 	}
 
 }
