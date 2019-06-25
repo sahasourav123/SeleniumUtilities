@@ -1,5 +1,6 @@
 package utility;
 
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 
+import pojo.DesiredException;
 import pojo.ThreadData;
 
 public class GetDriver {
@@ -28,16 +30,22 @@ public class GetDriver {
 		threadData = new ThreadData();
 	}
 
-	/**
-	 * Create an IE Driver Instance
-	 * @param initialURL
-	 * @return
-	 */
-	public WebDriver ieDriver() {
+	
+	public WebDriver ieDriver() throws DesiredException {
 		return ieDriver("");
 	}
-	public WebDriver ieDriver(String initialURL) {
-
+	
+	/**
+	 * Create an IE Driver Instance
+	 * @param Initial URL
+	 * @return IE Driver
+	 * @throws DesiredException - If driver not found in project root folder
+	 */
+	public WebDriver ieDriver(String initialURL) throws DesiredException {
+		
+		boolean checkDriver = new File("IEDriverServer.exe").isFile(); 
+		if(!checkDriver) throw new DesiredException("Driver doesn't exist in project root folder");
+		
 		System.setProperty("webdriver.ie.driver", "IEDriverServer.exe");
 		InternetExplorerOptions options = new InternetExplorerOptions();
 
@@ -62,14 +70,24 @@ public class GetDriver {
 
 	/**
 	 * Create a Chrome Driver Instance
-	 * @return
+	 * @return Chrome Driver
+	 * @throws DesiredException - If driver not found in project root folder
 	 */
-	public WebDriver chromeDriver() {
+	public WebDriver chromeDriver() throws DesiredException {
 		return chromeDriver("");
 	}
 	
-	public WebDriver chromeDriver(String initialURL) {
+	/**
+	 * Create a Chrome Driver Instance
+	 * @param Initial URL
+	 * @return Chrome Driver
+	 * @throws DesiredException - If driver not found in project root folder
+	 */
+	public WebDriver chromeDriver(String initialURL) throws DesiredException {
 
+		boolean checkDriver = new File("chromedriver.exe").isFile(); 
+		if(!checkDriver) throw new DesiredException("chromedriver.exe doesn't exist in project root folder");
+		
 		System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
@@ -86,13 +104,22 @@ public class GetDriver {
 	/**
 	 * Create a Firefox Driver Instance
 	 * @return
+	 * @throws DesiredException - If driver not found in project root folder
 	 */
-	public WebDriver firefoxDriver() {
+	public WebDriver firefoxDriver() throws DesiredException {
 		return firefoxDriver("");
 	}
 	
-	
-	public WebDriver firefoxDriver(String initialURL) {
+	/**
+	 * Create an Firefox Driver Instance
+	 * @param Initial URL
+	 * @return Firefox Driver
+	 * @throws DesiredException - If driver not found in project root folder
+	 */
+	public WebDriver firefoxDriver(String initialURL) throws DesiredException {
+		
+		boolean checkDriver = new File("geckodriver.exe").isFile(); 
+		if(!checkDriver) throw new DesiredException("geckodriver.exe doesn't exist in project root folder");
 
 		System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
 		driver = new FirefoxDriver();

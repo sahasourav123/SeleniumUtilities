@@ -1,7 +1,5 @@
 package toolkit;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -20,11 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-
-import pojo.DesiredException;
 import utility.MyLogger;
 
 public class SupportUtil {
@@ -209,48 +202,6 @@ public class SupportUtil {
 		return inp;
 	}
 
-	// Rename the file name in file system, Full file-folder path is required
-	public void renameFile(String oldFileFullPath, String newFileFullPath) throws Exception {
-
-		// File (or directory) with old name
-		File file = new File(oldFileFullPath);
-
-		// File (or directory) with new name
-		File file2 = new File(newFileFullPath);
-
-		if (file2.exists())
-			throw new DesiredException("file exists");
-
-		// Rename file (or directory)
-		boolean success = file.renameTo(file2);
-
-		if (!success) {
-			throw new DesiredException("Renaming Failed");
-		}
-	}
-
-	// Read PDF/Text File and Return the Extracted Text as Array of lines
-	public String[] fileHandler(String filePath) {
-		String[] lines = null;
-		try {
-			if (filePath.toLowerCase().endsWith(".pdf")) {
-				PDDocument document = PDDocument.load(new File(filePath));
-				String text = new PDFTextStripper().getText(document);
-				lines = text.split(System.getProperty("line.separator"));
-				document.close();
-				logger.success("PDF File Loaded Successfully", false);
-			} else if (filePath.toLowerCase().endsWith(".txt")) {
-				String text = IOUtils.toString(new FileInputStream(filePath));
-				lines = text.split(System.getProperty("line.separator"));
-				logger.success("TXT File Loaded Successfully", false);
-			} else {
-				logger.error("File Type not handled for parsing", false);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return lines;
-	}
 
 	// Validate date format
 	public boolean isValidFormat(String format, String value) {

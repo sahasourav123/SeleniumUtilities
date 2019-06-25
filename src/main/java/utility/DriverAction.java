@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import pojo.DesiredException;
 import pojo.Keywords;
 
-public class DriverAction {
+public class DriverAction implements iDriverAction{
 
 	WebDriver driver;
 	DriverSupport support;
@@ -17,9 +17,9 @@ public class DriverAction {
 		this.logger = new MyLogger(Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
 	
+	@Override
 	public boolean selectRadioOption(Keywords locatorType, String locatorValue, String optionValue) {
-		String xpath = "//input[@" + locatorType.toString().toLowerCase() + "='" + locatorValue 
-				+ "' and @value='" + optionValue.toLowerCase() + "']";
+		String xpath = "//input[@" + locatorType.toString().toLowerCase() + "='" + locatorValue + "' and @value='" + optionValue.toLowerCase() + "']";
 		try {
 			support.jsClick(Keywords.Xpath, xpath);
 			return true;
@@ -29,6 +29,7 @@ public class DriverAction {
 		}
 	}
 	
+	@Override
 	public boolean selectDropdownOption(Keywords locatorType, String locatorValue, String optionValue) {
 		try {
 			support.getSelect(locatorType, locatorValue).selectByVisibleText(optionValue);
@@ -39,6 +40,7 @@ public class DriverAction {
 		}
 	}
 	
+	@Override
 	public boolean setText(Keywords locatorType, String locatorValue, String text) {
 		try {
 			support.getElement(locatorType, locatorValue).sendKeys(text);
