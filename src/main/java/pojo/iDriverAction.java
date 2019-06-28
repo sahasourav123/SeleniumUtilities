@@ -1,6 +1,4 @@
-package utility;
-
-import pojo.Keywords;
+package pojo;
 
 public interface iDriverAction {
 	
