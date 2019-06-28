@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
@@ -25,6 +27,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pojo.DesiredException;
 import pojo.Keywords;
 import pojo.ThreadData;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 import toolkit.SupportUtil;
 import utility.CustomWait;
 
@@ -435,12 +440,12 @@ public class DriverSupport {
 		// Get Location in Webpage
 		int xLocation = element.getLocation().getX();
 		int yLocation = element.getLocation().getY();
-		double index = Math.sqrt(xLocation * xLocation + yLocation * yLocation);
-		System.out.println("Location(x,y->z): " + xLocation + ", " + yLocation + " -> " + index);
+		double iLocation = Math.sqrt(xLocation * xLocation + yLocation * yLocation);
+		//System.out.println("Location(x,y->z): " + xLocation + ", " + yLocation + " -> " + iLocation);
 
 		prop.setProperty("xLocation", String.valueOf(xLocation));
 		prop.setProperty("yLocation", String.valueOf(yLocation));
-		prop.setProperty("index", String.valueOf(index));
+		prop.setProperty("iLocation", String.valueOf(iLocation));
 
 		return prop;
 	}
@@ -463,8 +468,25 @@ public class DriverSupport {
 		File reportFolder = new File("Report");
 		if (!reportFolder.exists())
 			reportFolder.mkdirs();
-		String screenShotFileName = "Report\\Screen_" + util.getTimestamp();
+		String pageTitle = driver.getTitle();
+		String screenShotFileName = "Report\\" + pageTitle + "_" + util.getTimestamp();
 		return ScreenShot(screenShotFileName);
+	}
+	
+	public boolean takeScreenShot() {
+		String pageTitle = driver.getTitle();
+		String screenShotFileName = "Report\\" + pageTitle + "_x_" + util.getTimestamp() + ".png";
+		
+		try {
+			Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+			ImageIO.write(fpScreenshot.getImage(), "PNG", new File(screenShotFileName));
+			return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.warning("Failed to capture Screenshot: " + screenShotFileName + e.getMessage());
+			return false;
+		}
 	}
 
 }
