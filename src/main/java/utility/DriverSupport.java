@@ -25,7 +25,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import pojo.DesiredException;
-import pojo.Keywords;
 import pojo.ThreadData;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
@@ -36,17 +35,43 @@ import utility.CustomWait;
 public class DriverSupport {
 
 	WebDriver driver;
-	MyLogger logger;
+	CustomLogger logger;
 	String threadName;
 	ThreadData threadData;
 	SupportUtil util;
+	
+	public enum ScreenShotType {
+		FullPage,
+		ViewArea;
+	}
+	
+	public enum Locator {
+		Name,
+		NameStartWith,
+		NameEndWith,
+		NameContains,
+		
+		Id,
+		IdStartWith,
+		IdEndWith,
+		IdContains,
+		
+		Xpath,
+		CSSSelector,
+		
+		ClassName,
+		TagName,
+		
+		LinkText,
+		PartialLinkText;
+	}
 
 	public DriverSupport(WebDriver driver) {
 		this.driver = driver;
 		this.util = new SupportUtil();
 		this.threadName = Thread.currentThread().getName();
 		this.threadData = Environment.ThreadPool.get(threadName);
-		this.logger = new MyLogger(
+		this.logger = new CustomLogger(
 				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
 
@@ -95,7 +120,7 @@ public class DriverSupport {
 	 * @param locatorType[as  String]
 	 * @param locatorValue[as String]
 	 */
-	public void jsClick(Keywords locatorType, String locatorValue) {
+	public void jsClick(Locator locatorType, String locatorValue) {
 		WebElement element = driver.findElement(customLocator(locatorType, locatorValue));
 		jsElement(element);
 	}
@@ -236,7 +261,7 @@ public class DriverSupport {
 	 * @param locatorValue - locator value as per HTML
 	 * @return
 	 */
-	public By customLocator(Keywords locatorType, String locatorValue) {
+	public By customLocator(Locator locatorType, String locatorValue) {
 		By byLocator = null;
 		switch (locatorType) {
 		case Id:
@@ -309,7 +334,7 @@ public class DriverSupport {
 	 * @return
 	 * @throws ElementNotVisibleException
 	 */
-	public WebElement getElement(Keywords locatorType, String locatorValue) throws DesiredException {
+	public WebElement getElement(Locator locatorType, String locatorValue) throws DesiredException {
 		By locator = customLocator(locatorType, locatorValue);
 		new CustomWait(driver).explicitWait(10, locatorType, locatorValue);
 
@@ -321,7 +346,7 @@ public class DriverSupport {
 		}
 	}
 
-	public Select getSelect(Keywords locatorType, String locatorValue) throws DesiredException {
+	public Select getSelect(Locator locatorType, String locatorValue) throws DesiredException {
 		return new Select(getElement(locatorType, locatorValue));
 	}
 
@@ -334,7 +359,7 @@ public class DriverSupport {
 		}
 	}
 
-	public boolean isElement(Keywords locatorType, String locatorValue) {
+	public boolean isElement(Locator locatorType, String locatorValue) {
 		try {
 			driver.findElement(customLocator(locatorType, locatorValue));
 			return true;
@@ -435,22 +460,23 @@ public class DriverSupport {
 		return attribute;
 	}
 
+	/**
+	 * Get Location of a web-element
+	 * @param element
+	 * @return Properties
+	 */
 	public Properties getExtrinsicProperty(WebElement element) {
 		Properties prop = new Properties();
-		// Get Location in Webpage
 		int xLocation = element.getLocation().getX();
 		int yLocation = element.getLocation().getY();
-		double iLocation = Math.sqrt(xLocation * xLocation + yLocation * yLocation);
-		//System.out.println("Location(x,y->z): " + xLocation + ", " + yLocation + " -> " + iLocation);
 
 		prop.setProperty("xLocation", String.valueOf(xLocation));
 		prop.setProperty("yLocation", String.valueOf(yLocation));
-		prop.setProperty("iLocation", String.valueOf(iLocation));
 
 		return prop;
 	}
 
-	public boolean ScreenShot(String fileName) {
+	public boolean viewAreaScreenShot(String fileName) {
 		String fileAs = fileName + ".png";
 		try {
 			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -464,27 +490,30 @@ public class DriverSupport {
 		}
 	}
 
-	public boolean ScreenShot() {
+	public boolean takeScreenShot(ScreenShotType type) {
 		File reportFolder = new File("Report");
 		if (!reportFolder.exists())
 			reportFolder.mkdirs();
 		String pageTitle = driver.getTitle();
 		String screenShotFileName = "Report\\" + pageTitle + "_" + util.getTimestamp();
-		return ScreenShot(screenShotFileName);
+		
+		if(type==ScreenShotType.ViewArea) {
+			return viewAreaScreenShot(screenShotFileName);
+		}else {
+			return fullPageScreenShot(screenShotFileName);
+		}
 	}
 	
-	public boolean takeScreenShot() {
-		String pageTitle = driver.getTitle();
-		String screenShotFileName = "Report\\" + pageTitle + "_x_" + util.getTimestamp() + ".png";
+	public boolean fullPageScreenShot(String fileName) {
 		
 		try {
 			Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
-			ImageIO.write(fpScreenshot.getImage(), "PNG", new File(screenShotFileName));
+			ImageIO.write(fpScreenshot.getImage(), "PNG", new File(fileName));
 			return true;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.warning("Failed to capture Screenshot: " + screenShotFileName + e.getMessage());
+			logger.warning("Failed to capture Screenshot: " + fileName + e.getMessage());
 			return false;
 		}
 	}
