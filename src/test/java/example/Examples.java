@@ -6,11 +6,8 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
 import pojo.DesiredException;
-import pojo.Keywords;
-import utility.CustomWait;
-import utility.DriverAction;
-import utility.DriverSupport;
-import utility.GetDriver;
+import utility.*;
+import utility.DriverSupport.*;
 
 public class Examples {
 
@@ -35,19 +32,19 @@ public class Examples {
 
 	@Test
 	public void test_01() throws DesiredException {
-		action.setText(Keywords.Name, "first_name", "Sourav");
-		action.setText(Keywords.NameStartWith, "last_name", "Saha");
-		action.setText(Keywords.NameEndWith, "email", "test.mail@gmail.com");
-		action.setText(Keywords.NameContains, "phone", "9876543210");
-		action.setText(Keywords.Name, "address", "Saha Maison");
-		action.setText(Keywords.Name, "city", "Kolkata");
-		action.selectDropdownOption(Keywords.Name, "state", "Texas");
-		action.setText(Keywords.Name, "zip", "700093");
-		action.setText(Keywords.Name, "website", "https://github.com/sahasourav123");
-		action.selectRadioOption(Keywords.Name, "hosting", "No");
-		action.setText(Keywords.Name, "comment", "Selenium Utilities");
-		support.ScreenShot();
-		support.jsClick(Keywords.Xpath, "//button[@type='submit']");
+		action.setText(Locator.Name, "first_name", "Sourav");
+		action.setText(Locator.NameStartWith, "last_name", "Saha");
+		action.setText(Locator.NameEndWith, "email", "test.mail@gmail.com");
+		action.setText(Locator.NameContains, "phone", "9876543210");
+		action.setText(Locator.Name, "address", "Saha Maison");
+		action.setText(Locator.Name, "city", "Kolkata");
+		action.selectDropdownOption(Locator.Name, "state", "Texas");
+		action.setText(Locator.Name, "zip", "700093");
+		action.setText(Locator.Name, "website", "https://github.com/sahasourav123");
+		action.selectRadioOption(Locator.Name, "hosting", "No");
+		action.setText(Locator.Name, "comment", "Selenium Utilities");
+		support.takeScreenShot(ScreenShotType.FullPage);
+		support.jsClick(Locator.Xpath, "//button[@type='submit']");
 		wait.waitForPageLoad();
 	}
 	

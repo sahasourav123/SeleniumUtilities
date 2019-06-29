@@ -9,20 +9,20 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import pojo.DesiredException;
-import utility.MyLogger;
+import utility.CustomLogger;
 
 public class FileUtility {
 	
-	MyLogger logger;
+	CustomLogger logger;
 	
 	public FileUtility() {
-		this.logger = new MyLogger(
+		this.logger = new CustomLogger(
 				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
 
 	
 	/**
-	 *  Read PDF/Text File and Return the Extracted Text as Array of lines
+	 * Read PDF/Text File and Return the Extracted Text as Array of lines
 	 * @param Absolute path of the file
 	 * @return 
 	 */
@@ -35,8 +35,9 @@ public class FileUtility {
 				lines = text.split(System.getProperty("line.separator"));
 				document.close();
 				logger.success("PDF File Loaded Successfully", false);
+				
 			} else if (filePath.toLowerCase().endsWith(".txt")) {
-				String text = IOUtils.toString(new FileInputStream(filePath));
+				String text = IOUtils.toString(new FileInputStream(filePath), "UTF-8");
 				lines = text.split(System.getProperty("line.separator"));
 				logger.success("TXT File Loaded Successfully", false);
 			} else {
@@ -49,7 +50,7 @@ public class FileUtility {
 	}
 	
 	/**
-	 *  Rename the file name in file system, Full file-folder path is required
+	 * Rename the file name in file system, Full file-folder path is required
 	 * @param oldFileFullPath - existing absolute of file/folder
 	 * @param newFileFullPath - 
 	 * @throws DesiredException - If file/folder with same name exists or renaming failed.

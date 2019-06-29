@@ -18,14 +18,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import utility.MyLogger;
+import utility.CustomLogger;
 
 public class SupportUtil {
 
-	MyLogger logger;
+	CustomLogger logger;
 
 	public SupportUtil() {
-		this.logger = new MyLogger(
+		this.logger = new CustomLogger(
 				Thread.currentThread().getStackTrace()[2].getClassName() + " : " + this.getClass().getSimpleName());
 	}
 
