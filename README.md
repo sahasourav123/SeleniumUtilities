@@ -1,5 +1,5 @@
 # Selenium Utilities 
-![](https://img.shields.io/badge/build-passing-success.svg) ![](https://img.shields.io/badge/Java->=8(update%20181)-blue.svg) ![](https://img.shields.io/badge/maintenance-weekly-brightgreen.svg) ![](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![](https://img.shields.io/badge/version-1.0.9-blue.svg)
+![](https://img.shields.io/badge/build-passing-success.svg) ![](https://img.shields.io/badge/Java->=8(update%20181)-blue.svg) ![](https://img.shields.io/badge/maintenance-weekly-brightgreen.svg) ![](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![](https://img.shields.io/badge/version-1.1.2-blue.svg)
 
 Supporting utilities to develop automation suite with Java/Selenium.
 Web Automation and File Automation related basic reusable building blocks are put together for faster prototyping.
