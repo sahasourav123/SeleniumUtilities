@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.openqa.selenium.By;
@@ -16,7 +17,7 @@ import toolkit.ExcelData;
 import toolkit.SupportUtil;
 import utility.DriverSupport.ScreenShotType;
 
-public class KnowElements {
+public class ObjectRepository {
 
 	WebDriver driver;
 	DriverSupport support;
@@ -24,14 +25,14 @@ public class KnowElements {
 	SupportUtil util;
 	ArrayList<ArrayList<Object>> objectTable;
 
-	public KnowElements(WebDriver driver) {
+	public ObjectRepository(WebDriver driver) {
 		this.driver = driver;
 		support = new DriverSupport(driver);
 		logger = new CustomLogger();
 		util = new SupportUtil();
 	}
 
-	public void fetchBot() {
+	public void developRepository() {
 		objectTable = new ArrayList<ArrayList<Object>>();
 		ArrayList<Object> header = new ArrayList<Object>();
 		header.add("Element Counter");
@@ -44,14 +45,19 @@ public class KnowElements {
 		objectTable.add(header);
 		
 		logger.info("Fetch element bot initiated.");
+
+		JOptionPane pane = new JOptionPane();  
+		JDialog dialog = pane.createDialog("");  
+		dialog.setAlwaysOnTop(true);
+		
 		while (true) {
-			int n = JOptionPane.showConfirmDialog(null, "Yes: Capture\nNo: Terminate", "Capture Page Elements",
+			int n = JOptionPane.showConfirmDialog(dialog, "Yes: Capture\nNo: Terminate", "Capture Page Elements",
 					JOptionPane.YES_NO_OPTION);
 			if (n == JOptionPane.YES_OPTION) {
 				String pageName = driver.getTitle();
 				logger.info("Title: " + pageName);
 				logger.info("Url: " + driver.getCurrentUrl());
-				fetchElements(pageName);
+				dumpWebElements(pageName);
 				support.takeScreenShot(ScreenShotType.FullPage);
 
 			} else {
@@ -65,7 +71,7 @@ public class KnowElements {
 		new ExcelData().writeData(fileName, objectTable);
 	}
 
-	public void fetchElements(String pageName) {
+	public void dumpWebElements(String pageName) {
 		String[] skipTag = { "div", "section", "form" };
 		List<String> skipTagList = Arrays.asList(skipTag);
 		int counter = -1;

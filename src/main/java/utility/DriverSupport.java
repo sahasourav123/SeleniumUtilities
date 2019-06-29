@@ -475,27 +475,13 @@ public class DriverSupport {
 
 		return prop;
 	}
-
-	public boolean viewAreaScreenShot(String fileName) {
-		String fileAs = fileName + ".png";
-		try {
-			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(scrFile, new File(fileAs));
-			logger.info("Screenshot Saved Successfully: " + fileAs);
-			return true;
-
-		} catch (Exception e) {
-			logger.warning("Failed to capture Screenshot: " + fileAs + e.getMessage());
-			return false;
-		}
-	}
-
+	
 	public boolean takeScreenShot(ScreenShotType type) {
 		File reportFolder = new File("Report");
 		if (!reportFolder.exists())
 			reportFolder.mkdirs();
 		String pageTitle = driver.getTitle();
-		String screenShotFileName = "Report\\" + pageTitle + "_" + util.getTimestamp();
+		String screenShotFileName = "Report\\" + pageTitle + "_" + util.getTimestamp() + ".png";
 		
 		if(type==ScreenShotType.ViewArea) {
 			return viewAreaScreenShot(screenShotFileName);
@@ -503,8 +489,27 @@ public class DriverSupport {
 			return fullPageScreenShot(screenShotFileName);
 		}
 	}
-	
+
+	public boolean viewAreaScreenShot(String fileName) {
+		if(!(fileName.endsWith(".png") || fileName.endsWith(".jpg"))) {
+			fileName = fileName + ".png";
+		}
+		try {
+			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+			FileUtils.copyFile(scrFile, new File(fileName));
+			logger.info("Screenshot Saved Successfully: " + fileName);
+			return true;
+
+		} catch (Exception e) {
+			logger.warning("Failed to capture Screenshot: " + fileName + e.getMessage());
+			return false;
+		}
+	}
+
 	public boolean fullPageScreenShot(String fileName) {
+		if(!fileName.endsWith(".png")) {
+			fileName = fileName + ".png";
+		}
 		
 		try {
 			Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);

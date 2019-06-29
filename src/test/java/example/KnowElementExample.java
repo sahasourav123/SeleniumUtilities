@@ -5,18 +5,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import utility.GetDriver;
-import utility.KnowElements;
+import utility.ObjectRepository;
 
 public class KnowElementExample {
 	
 	WebDriver driver;
-	KnowElements know;
+	ObjectRepository know;
 
 	@Before
 	public void setUp() throws Exception {
 		String url = "https://www.seleniumeasy.com/test/input-form-demo.html";
 		driver = new GetDriver().chromeDriver(url);
-		know = new KnowElements(driver);
+		know = new ObjectRepository(driver);
 	}
 
 	@After
@@ -26,7 +26,7 @@ public class KnowElementExample {
 
 	@Test
 	public void test() {
-		know.fetchBot();
+		know.developRepository();
 	}
 
 }
