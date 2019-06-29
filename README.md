@@ -43,6 +43,7 @@ Test Automation Framework as API.
 
 ### Example
 [See Example](https://github.com/sahasourav123/SeleniumUtilities/blob/master/src/test/java/example/Examples.java) using this Utility Library.
+[See Example](https://github.com/sahasourav123/SeleniumUtilities/blob/master/src/test/java/example/KnowElementExample.java) to dump all element in the page.
 
 ### Get Compatible Driver
 Download compatible driver.exe.
@@ -99,7 +100,7 @@ new KnowElements(driver).fetchBot();
  
 ![](https://img.shields.io/badge/-Xpath-yellowgreen.svg) ![](https://img.shields.io/badge/-Id-yellowgreen.svg) ![](https://img.shields.io/badge/-IdContains-yellowgreen.svg) ![](https://img.shields.io/badge/-IdStartWith-yellowgreen.svg) ![](https://img.shields.io/badge/-IdEndWith-yellowgreen.svg)
 
- ![](https://img.shields.io/badge/-CSSSelector-yellowgreen.svg) ![](https://img.shields.io/badge/-ClassName-yellowgreen.svg) ![](https://img.shields.io/badge/-Class-yellowgreen.svg) ![](https://img.shields.io/badge/-LinkText-yellowgreen.svg) ![](https://img.shields.io/badge/-PartialLinkText-yellowgreen.svg) ![](https://img.shields.io/badge/-TagName-yellowgreen.svg)
+ ![](https://img.shields.io/badge/-CSSSelector-yellowgreen.svg) ![](https://img.shields.io/badge/-ClassName-yellowgreen.svg) ![](https://img.shields.io/badge/-LinkText-yellowgreen.svg) ![](https://img.shields.io/badge/-PartialLinkText-yellowgreen.svg) ![](https://img.shields.io/badge/-TagName-yellowgreen.svg)
  
  ```
 By byElement = support.customLocator(Locator.IdStartWith, "Quote");
