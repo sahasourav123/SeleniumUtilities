@@ -7,15 +7,17 @@ import java.util.Date;
 
 import org.openqa.selenium.WebDriver;
 
-public class MyLogger {
+import utility.DriverSupport.ScreenShotType;
+
+public class CustomLogger {
 	String logFileName = "execution.log";
 	String className;
 
-	public MyLogger() {
+	public CustomLogger() {
 		this.className = Thread.currentThread().getStackTrace()[2].getClassName();
 	}
 
-	public MyLogger(String className) {
+	public CustomLogger(String className) {
 		this.className = className;
 	}
 
@@ -90,7 +92,7 @@ public class MyLogger {
 
 			if (screenshotFlag) {
 				WebDriver driver = Environment.ThreadPool.get(Thread.currentThread().getName()).driver;
-				new DriverSupport(driver).ScreenShot();
+				new DriverSupport(driver).takeScreenShot(ScreenShotType.FullPage);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
