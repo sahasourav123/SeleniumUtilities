@@ -24,7 +24,7 @@ Test Automation Framework as API.
   <dependency>
     <groupId>automation</groupId>
     <artifactId>SeleniumUtilities</artifactId>
-    <version>1.0.9</version>
+    <version>1.1.1</version>
   </dependency>
 </dependencies>
 
@@ -75,15 +75,25 @@ Rapid Data Entry Object (Wrapper on DriverSupport Class)
 ```
 DriverAction action = new DriverAction(driver);
 ```
-SendKeys/ Select From Dropdown & SelectRadioButton using DriverAction (all One-liner)
+SendKeys, SelectDropdownOption & SelectRadioButton using DriverAction (all One-liner)
 ```
-action.setText(Keywords.Name, "first_name", "Sourav");
-action.selectDropdownOption(Keywords.Name, "state", "Texas");
-action.selectRadioOption(Keywords.Name, "hosting", "No");
-support.jsClick(Keywords.Xpath, "//button[@type='submit']");
+action.setText(Locator.Name, "first_name", "Sourav");
+action.selectDropdownOption(Locator.Name, "state", "Texas");
+action.selectRadioOption(Locator.Name, "hosting", "No");
+support.jsClick(Locator.Xpath, "//button[@type='submit']");
 ```
 
- Find a WebElement or perform an action quickly using Keywords enum and :
+Take Screenshot easily
+```
+support.takeScreenShot(ScreenShotType.FullPage);
+```
+
+Dump all page elements
+```
+new KnowElements(driver).fetchBot();
+```
+
+ Find a WebElement or perform an action quickly using Locator enum and :
  
  ![](https://img.shields.io/badge/-Name-yellowgreen.svg) ![](https://img.shields.io/badge/-NameContains-yellowgreen.svg) ![](https://img.shields.io/badge/-NameStartWith-yellowgreen.svg) ![](https://img.shields.io/badge/-NameEndWith-yellowgreen.svg)
  
@@ -92,7 +102,7 @@ support.jsClick(Keywords.Xpath, "//button[@type='submit']");
  ![](https://img.shields.io/badge/-CSSSelector-yellowgreen.svg) ![](https://img.shields.io/badge/-ClassName-yellowgreen.svg) ![](https://img.shields.io/badge/-Class-yellowgreen.svg) ![](https://img.shields.io/badge/-LinkText-yellowgreen.svg) ![](https://img.shields.io/badge/-PartialLinkText-yellowgreen.svg) ![](https://img.shields.io/badge/-TagName-yellowgreen.svg)
  
  ```
-By byElement = support.customLocator(Keywords.IdStartWith, "Quote");
+By byElement = support.customLocator(Locator.IdStartWith, "Quote");
 ```
 Check if Element present in dom
 ```
@@ -111,8 +121,8 @@ Wait up-to specified seconds for a element and return boolean status
 ```
 boolean status;
 status = wait.explicitWait(8, byElement);
-status = wait.waitForInvisibilityOfElement(5, Keywords.IdContains, "Partial_id_of_element");
-status = wait.waitForStalenessOfElement(5, Keywords.Xapth, "XPath_of_element");
+status = wait.waitForInvisibilityOfElement(5, Locator.IdContains, "Partial_id_of_element");
+status = wait.waitForStalenessOfElement(5, Locator.Xapth, "XPath_of_element");
 ```
 ### How the architecture looks like
 ![Architecture](architecture.png)
