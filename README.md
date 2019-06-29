@@ -24,7 +24,7 @@ Test Automation Framework as API.
   <dependency>
     <groupId>automation</groupId>
     <artifactId>SeleniumUtilities</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
   </dependency>
 </dependencies>
 
