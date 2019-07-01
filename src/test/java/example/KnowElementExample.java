@@ -10,13 +10,13 @@ import utility.ObjectRepository;
 public class KnowElementExample {
 	
 	WebDriver driver;
-	ObjectRepository know;
+	ObjectRepository objRepo;
 
 	@Before
 	public void setUp() throws Exception {
 		String url = "https://www.seleniumeasy.com/test/input-form-demo.html";
 		driver = new GetDriver().chromeDriver(url);
-		know = new ObjectRepository(driver);
+		objRepo = new ObjectRepository(driver);
 	}
 
 	@After
@@ -26,7 +26,7 @@ public class KnowElementExample {
 
 	@Test
 	public void test() {
-		know.developRepository();
+		objRepo.developRepository();
 	}
 
 }
