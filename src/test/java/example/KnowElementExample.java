@@ -14,7 +14,8 @@ public class KnowElementExample {
 
 	@Before
 	public void setUp() throws Exception {
-		String url = "https://www.seleniumeasy.com/test/input-form-demo.html";
+		//String url = "https://www.seleniumeasy.com/test/input-form-demo.html";
+		String url = "https://www.toolsqa.com/automation-practice-switch-windows/";
 		driver = new GetDriver().chromeDriver(url);
 		objRepo = new ObjectRepository(driver);
 	}
