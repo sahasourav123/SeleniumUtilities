@@ -193,8 +193,10 @@ public class DriverSupport {
 
 		// Return if current window frame is the desired window
 		try {
-			if (driver.getTitle().equalsIgnoreCase(windowName))
+			if (driver.getTitle().equalsIgnoreCase(windowName)) {
+				logger.info("Alreday in window:" + windowName);
 				return true;
+			}
 		} catch (Exception e) {
 		}
 
@@ -213,6 +215,7 @@ public class DriverSupport {
 					driver.switchTo().window(handle);
 					logger.debug("Switched to Window: " + windowName);
 					threadData.windowStack.add(windowTitle);
+					driver.manage().window().maximize();
 					return true;
 				}
 			}
