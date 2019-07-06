@@ -83,7 +83,10 @@ public class ObjectRepository {
 		
 		logger.info("Fetch element bot initiated...");
 		String[] options = {"Fetch Elements", "Select Window", "Exit..."};
-		String userInstruction = "1. Fetch - Extract WebElements from Page\n2. Scan Windows - Scan and select from opened browser window\n3. Exit - Exit and export all elements in excel";
+		String userInstruction = "Developed By: Sourav Saha\n\n"
+				+ "1. Fetch - Extract WebElements from Page\n"
+				+ "2. Scan Windows - Scan and select from opened browser window\n"
+				+ "3. Exit - Exit and export all elements in excel";
 		while (true) {
 			
 			// Pop-up modal for user interaction
@@ -95,10 +98,9 @@ public class ObjectRepository {
 					logger.info("Url: " + driver.getCurrentUrl());
 					
 					// Fetch elements and take screenshot
-					
-						dumpWebElements(pageName, "");
-						support.takeScreenShot(ScreenShotType.FullPage);
-	
+					dumpWebElements(pageName, "");
+					support.takeScreenShot(ScreenShotType.FullPage);
+
 				} else if (n == 1) {
 					// Scan windows
 					scanWindow();

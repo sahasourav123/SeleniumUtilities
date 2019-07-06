@@ -26,7 +26,7 @@ public class GetDriver {
 	ThreadData threadData;
 	
 	public GetDriver() {
-		System.err.println("Contributed by: Sourav Saha. \t For Feedback/Suggestion -> <sahasourav123@gmail.com>\n");
+		System.err.println("\nContributed by: Sourav Saha.<sahasourav123@gmail.com>\n");
 		threadData = new ThreadData();
 	}
 
