@@ -16,7 +16,6 @@ public class CustomWait {
 	WebDriver driver;
 	DriverSupport support;
 	CustomLogger logger;
-	final public static int Default_Wait = 45;
 
 	public CustomWait(WebDriver driver) {
 		this.driver = driver;
@@ -27,7 +26,7 @@ public class CustomWait {
 	public void waitForPageLoad() {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Default_Wait);
+			WebDriverWait wait = new WebDriverWait(driver, 30);
 			wait.until(new ExpectedCondition<Boolean>() {
 				@Override
 				public Boolean apply(WebDriver wdriver) {
@@ -61,19 +60,20 @@ public class CustomWait {
 			return false;
 		}
 	}
-
-	// explicit wait for an element in a frame
-	public void explicitWaitFrameElement(int timeToWait, Locator howToIdentify, String elementId, List<String> nestedFrames) {
+	
+	public boolean waitForElementWithinFrame(int timeToWait, Locator howToIdentify, String elementId, List<String> nestedFrames) {
 		if(support.switchToFrameWithWait(nestedFrames, timeToWait)) {
-			explicitWait(timeToWait, howToIdentify, elementId);
+			return explicitWait(timeToWait, howToIdentify, elementId);
 		}
+		return false;
 	}
 
 	// explicit wait for an element in frame
-	public void explicitWaitWindowElement(int timeToWait, Locator howToIdentify, String elementId, String window) {
+	public boolean waitForElementWithinWindow (int timeToWait, Locator howToIdentify, String elementId, String window) {
 		if(support.switchToWindow(window, timeToWait)) {
-			explicitWait(timeToWait, howToIdentify, elementId);
+			return explicitWait(timeToWait, howToIdentify, elementId);
 		}
+		return false;
 	}
 
 	public boolean staleWait(int timeToWait, WebElement element) {
@@ -136,12 +136,6 @@ public class CustomWait {
 		} catch (Exception e) {
 			return false;
 		}
-	}
-
-	public void waitForElementWithinFrame(int timeToWait, String frameNames, Locator howToIdentify, String elementId)
-			throws Exception {
-		support.switchToFrame(frameNames, ",");
-		explicitWait(timeToWait, howToIdentify, elementId);
 	}
 
 }
